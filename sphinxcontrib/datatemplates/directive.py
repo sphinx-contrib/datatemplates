@@ -59,7 +59,6 @@ class DataTemplate(rst.Directive):
             template_name,
             context,
         )
-        print(rendered_template)
 
         result = ViewList()
         for line in rendered_template.splitlines():

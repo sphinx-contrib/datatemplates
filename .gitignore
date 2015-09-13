@@ -1,0 +1,7 @@
+/.testrepository/
+/.tox/
+/AUTHORS
+/ChangeLog
+/*.egg-info/
+/build/
+/doc/build/

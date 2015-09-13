@@ -33,6 +33,7 @@ import pkg_resources
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinxcontrib.datatemplates',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

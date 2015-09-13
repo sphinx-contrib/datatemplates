@@ -33,7 +33,9 @@ class DataTemplate(rst.Directive):
         env = self.state.document.settings.env
         app = env.app
         builder = app.builder
-        templates = builder.templates
+        # Some builders have no templates manager at all, and some
+        # have the attribute set to None.
+        templates = getattr(builder, 'templates', None)
         if not templates:
             app.warn(
                 'The builder has no template manager, '

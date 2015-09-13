@@ -6,6 +6,8 @@ from docutils.statemachine import ViewList
 from sphinx.util.nodes import nested_parse_with_titles
 import yaml
 
+from sphinxcontrib.datatemplates import helpers
+
 
 class DataTemplate(rst.Directive):
 
@@ -53,6 +55,9 @@ class DataTemplate(rst.Directive):
         data = self._load_data(env, data_source)
 
         context = {
+            'make_list_table': helpers.make_list_table,
+            'make_list_table_from_mappings':
+                helpers.make_list_table_from_mappings,
             'data': data,
         }
         rendered_template = builder.templates.render(

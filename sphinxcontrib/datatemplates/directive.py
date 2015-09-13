@@ -1,3 +1,5 @@
+import json
+
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
@@ -12,6 +14,18 @@ class DataTemplate(rst.Directive):
         'template': rst.directives.unchanged,
     }
     has_content = False
+
+    def _load_data(self, env, data_source):
+        rel_filename, filename = env.relfn2path(data_source)
+        if data_source.endswith('.yaml'):
+            with open(filename, 'r') as f:
+                return yaml.load(f)
+        elif data_source.endswith('.json'):
+            with open(filename, 'r') as f:
+                return json.load(f)
+        else:
+            raise NotImplementedError('cannot load file type of %s' %
+                                      data_source)
 
     def run(self):
         env = self.state.document.settings.env
@@ -36,13 +50,7 @@ class DataTemplate(rst.Directive):
                 line=self.lineno)
             return [error]
 
-        rel_filename, filename = env.relfn2path(data_source)
-        if data_source.endswith('.yaml'):
-            with open(filename, 'r') as f:
-                data = yaml.load(f)
-        else:
-            raise NotImplementedError('cannot load file type of %s' %
-                                      data_source)
+        data = self._load_data(env, data_source)
 
         context = {
             'data': data,

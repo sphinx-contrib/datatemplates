@@ -5,6 +5,7 @@
 .. toctree::
    :maxdepth: 2
 
+   json
    yaml
 
 Indices and tables

@@ -33,6 +33,12 @@ class DataTemplate(rst.Directive):
         env = self.state.document.settings.env
         app = env.app
         builder = app.builder
+        templates = builder.templates
+        if not templates:
+            app.warn(
+                'The builder has no template manager, '
+                'ignoring the datatemplate directive.')
+            return []
 
         try:
             data_source = self.options['source']

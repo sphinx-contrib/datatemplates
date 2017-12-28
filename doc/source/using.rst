@@ -13,6 +13,12 @@ source and the rendering template. It requires two parameters.
    ``template``
       The name of a template file on the Sphinx template search path.
 
+   ``key``
+      **Optional**: A specific data key to pass to the template, so you can render a subset of the data.
+
+   ``include_context``
+      **Optional**: A flag that includes the ``html_context`` from your normal build in the _template_ rendering context.
+
 Template Context
 ================
 
@@ -24,6 +30,23 @@ The data is loaded from the source and passed directly to the
 template. No pre-processing is done on the data, so the template needs
 to handle aspects like ``None`` values and fields that have values
 that may interfere with parsing reStructuredText.
+
+If you set `:key: any_key` on the directive,
+you will have a top-level ``key`` variable.
+This can be used to render a subset of the data in the template.
+
+If you set `:include_context:` on the directive,
+you template will also have access to the builder's ``html_context`` while rendering.
+This will be in the global template context, not inside ``data``.
+
+An example would look like::
+
+    .. datatemplate::
+       :source: all-videos.yaml
+       :template: video-listing.jinja
+       :key: keynote-1
+       :include_context:
+
 
 Template Helpers
 ================

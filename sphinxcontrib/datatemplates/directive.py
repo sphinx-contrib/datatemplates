@@ -14,6 +14,8 @@ class DataTemplate(rst.Directive):
     option_spec = {
         'source': rst.directives.unchanged,
         'template': rst.directives.unchanged,
+        'key': rst.directives.unchanged,
+        'include_context': rst.directives.flag,
     }
     has_content = False
 
@@ -60,14 +62,28 @@ class DataTemplate(rst.Directive):
                 line=self.lineno)
             return [error]
 
+        key = self.options.get('key')
+        include_context = self.options.get('include_context')
+
         data = self._load_data(env, data_source)
 
-        context = {
+        context = {}
+
+        if include_context:
+            try:
+                context.update(app.builder.html_context)
+            except KeyError:
+                app.warn('`include_context` set, but builder has no `html_context`.')
+
+
+        context.update({
             'make_list_table': helpers.make_list_table,
             'make_list_table_from_mappings':
                 helpers.make_list_table_from_mappings,
             'data': data,
-        }
+            'key': key,
+        })
+
         rendered_template = builder.templates.render(
             template_name,
             context,

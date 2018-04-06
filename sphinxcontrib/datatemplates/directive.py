@@ -58,6 +58,7 @@ class DataTemplate(rst.Directive):
                 app.info(
                     'No source set for datatemplate directive,',
                     'allowing because of other included context.')
+                data_source = ''
 
         try:
             template_name = self.options['template']
@@ -70,7 +71,10 @@ class DataTemplate(rst.Directive):
 
         key = self.options.get('key')
 
-        data = self._load_data(env, data_source)
+        if data_source:
+            data = self._load_data(env, data_source)
+        else:
+            data = {}
 
         context = {}
 

@@ -19,6 +19,9 @@ source and the rendering template. It requires two parameters.
    ``include_env``
       **Optional**: A flag that includes the ``env`` from your Sphinx in the _template_ rendering context.
 
+   ``include_context``
+      **Optional**: A flag that includes the ``env.app.config.html_context`` from your Sphinx in the _template_ rendering context. This could overwrite existing template context!
+
 Template Context
 ================
 
@@ -35,8 +38,15 @@ If you set ``:key: foo`` on the directive,
 you will have a top-level ``key`` variable.
 This can be used to render a subset of the data in the template.
 
+If you set `:include_context:` on the directive,
+your template have the full ``env.app.config.html_context`` injected at the top-level.
+This allows you to maintain Jinja templates that work for both rendering in normal Sphinx builds,
+and within datatemplates.
+
 If you set `:include_env:` on the directive,
-you template will also have access to the builder's ``env`` while rendering.
+your template will also have access to the builder's ``env`` while rendering.
+This gives you more flexibility,
+but is not as user friendly as `:include_context:`.
 
 An example would look like::
 
@@ -44,7 +54,7 @@ An example would look like::
        :source: all-videos.yaml
        :template: video-listing.jinja
        :key: keynote-1
-       :include_env:
+       :include_context:
 
 
 Template Helpers

@@ -16,6 +16,7 @@ class DataTemplate(rst.Directive):
         'template': rst.directives.unchanged,
         'key': rst.directives.unchanged,
         'include_env': rst.directives.flag,
+        'include_context': rst.directives.flag,
     }
     has_content = False
 
@@ -70,6 +71,14 @@ class DataTemplate(rst.Directive):
 
         if 'include_env' in self.options:
             context.update({'env': env})
+
+        if 'include_context' in self.options:
+            if 'html_context' in env.app.config:
+                context.update(**env.app.config.html_context)
+            else:
+                app.warn(
+                    'The builder has no html_context,'
+                    'ignoring the include_context directive.')
 
         context.update({
             'make_list_table': helpers.make_list_table,

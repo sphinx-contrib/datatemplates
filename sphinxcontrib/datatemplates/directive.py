@@ -48,11 +48,16 @@ class DataTemplate(rst.Directive):
         try:
             data_source = self.options['source']
         except KeyError:
-            error = self.state_machine.reporter.error(
-                'No source set for datatemplate directive',
-                nodes.literal_block(self.block_text, self.block_text),
-                line=self.lineno)
-            return [error]
+            if not ('include_context' in self.options or 'include_env' in self.options):
+                error = self.state_machine.reporter.error(
+                    'No source set for datatemplate directive',
+                    nodes.literal_block(self.block_text, self.block_text),
+                    line=self.lineno)
+                return [error]
+            else:
+                app.info(
+                    'No source set for datatemplate directive,',
+                    'allowing because of other included context.')
 
         try:
             template_name = self.options['template']

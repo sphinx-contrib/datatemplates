@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import argparse
+import io
 import json
 
 import jinja2
@@ -35,8 +36,8 @@ def main():
 
     data = _load_data(args.source)
 
-    with open(args.template, 'r') as f:
-        template_body = f.read().decode('utf-8')
+    with io.open(args.template, 'r', encoding='utf-8') as f:
+        template_body = f.read()
 
     template = jinja2.Template(template_body)
     rendered = template.render(

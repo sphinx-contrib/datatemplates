@@ -3,10 +3,13 @@ import json
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
+from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
 import yaml
 
 from sphinxcontrib.datatemplates import helpers
+
+LOG = logging.getLogger(__name__)
 
 
 class DataTemplate(rst.Directive):
@@ -37,7 +40,7 @@ class DataTemplate(rst.Directive):
         # have the attribute set to None.
         templates = getattr(builder, 'templates', None)
         if not templates:
-            app.warn(
+            LOG.warn(
                 'The builder has no template manager, '
                 'ignoring the datatemplate directive.')
             return []

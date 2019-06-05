@@ -1,4 +1,6 @@
 import json
+import mimetypes
+import xml.etree.ElementTree as ET
 
 from docutils import nodes
 from docutils.parsers import rst
@@ -28,6 +30,8 @@ class DataTemplate(rst.Directive):
         elif data_source.endswith('.json'):
             with open(filename, 'r') as f:
                 return json.load(f)
+        elif "xml" in mimetypes.guess_type(data_source)[0]:
+            return ET.parse(filename).getroot()
         else:
             raise NotImplementedError('cannot load file type of %s' %
                                       data_source)

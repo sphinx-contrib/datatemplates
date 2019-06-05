@@ -5,6 +5,7 @@ from docutils.parsers import rst
 from docutils.statemachine import ViewList
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
+import csv
 import yaml
 
 from sphinxcontrib.datatemplates import helpers
@@ -17,6 +18,7 @@ class DataTemplate(rst.Directive):
     option_spec = {
         'source': rst.directives.unchanged,
         'template': rst.directives.unchanged,
+        'csvheaders': rst.directives.flag,
     }
     has_content = False
 
@@ -28,6 +30,17 @@ class DataTemplate(rst.Directive):
         elif data_source.endswith('.json'):
             with open(filename, 'r') as f:
                 return json.load(f)
+        elif data_source.endswith('.csv'):
+            with open(filename, 'r', newline='') as f:
+                sample = f.read(8192)
+                f.seek(0)
+                sniffer = csv.Sniffer()
+                dialect = sniffer.sniff(sample)
+                if 'csvheaders' in self.options:
+                    r = csv.DictReader(f, dialect=dialect)
+                else:
+                    r = csv.reader(f, dialect=dialect)
+                return list(r)
         else:
             raise NotImplementedError('cannot load file type of %s' %
                                       data_source)

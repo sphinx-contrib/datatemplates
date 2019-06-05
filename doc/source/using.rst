@@ -13,6 +13,10 @@ source and the rendering template. It requires two parameters.
    ``template``
       The name of a template file on the Sphinx template search path.
 
+   ``csvheader`` (optional, CSV only)
+      Set to use first row of CSV as mapping keys for remaining rows.
+      If not set all rows are re read as sequences.
+
 Template Context
 ================
 

@@ -24,7 +24,7 @@ class DataTemplate(rst.Directive):
         rel_filename, filename = env.relfn2path(data_source)
         if data_source.endswith('.yaml'):
             with open(filename, 'r') as f:
-                return yaml.load(f)
+                return yaml.safe_load(f)
         elif data_source.endswith('.json'):
             with open(filename, 'r') as f:
                 return json.load(f)

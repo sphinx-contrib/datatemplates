@@ -1,0 +1,25 @@
+.. -*- mode: rst -*-
+
+Static Heading
+--------------
+
+Individual Item
+~~~~~~~~~~~~~~~
+
+{{ data.find('key1').text }}
+
+List of Items
+~~~~~~~~~~~~~
+
+{% for item in data.find('key2') %}
+- {{item.text}}
+{% endfor %}
+
+XPath for Items
+~~~~~~~~~~~~~~~
+
+See `XPath support <https://docs.python.org/3/library/xml.etree.elementtree.html#xpath-support>`_
+
+{% for item in data.findall(".//*[@special='yes']") %}
+- {{item.text}}
+{% endfor %}

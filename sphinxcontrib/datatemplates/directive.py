@@ -1,4 +1,6 @@
 import json
+import mimetypes
+import defusedxml.ElementTree as ET
 
 from docutils import nodes
 from docutils.parsers import rst
@@ -50,6 +52,9 @@ class DataTemplate(rst.Directive):
                     else:
                         r = csv.reader(f, dialect=dialect)
                 return list(r)
+        elif "xml" in mimetypes.guess_type(data_source)[0]:
+            return ET.parse(filename).getroot()
+
         else:
             raise NotImplementedError('cannot load file type of %s' %
                                       data_source)

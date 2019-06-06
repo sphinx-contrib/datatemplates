@@ -19,6 +19,7 @@ class DataTemplate(rst.Directive):
         'source': rst.directives.unchanged,
         'template': rst.directives.unchanged,
         'csvheaders': rst.directives.flag,
+        'csvdialect': (lambda argument:  rst.directives.choice(argument, ["auto"]+csv.list_dialects())),
     }
     has_content = False
 
@@ -32,14 +33,22 @@ class DataTemplate(rst.Directive):
                 return json.load(f)
         elif data_source.endswith('.csv'):
             with open(filename, 'r', newline='') as f:
-                sample = f.read(8192)
-                f.seek(0)
-                sniffer = csv.Sniffer()
-                dialect = sniffer.sniff(sample)
+                dialect=self.options.get('csvdialect')
+                if dialect == "auto":
+                    sample = f.read(8192)
+                    f.seek(0)
+                    sniffer = csv.Sniffer()
+                    dialect = sniffer.sniff(sample)
                 if 'csvheaders' in self.options:
-                    r = csv.DictReader(f, dialect=dialect)
+                    if dialect is None:
+                        r = csv.DictReader(f)
+                    else:
+                        r = csv.DictReader(f, dialect=dialect)
                 else:
-                    r = csv.reader(f, dialect=dialect)
+                    if dialect is None:
+                        r = csv.reader(f)
+                    else:
+                        r = csv.reader(f, dialect=dialect)
                 return list(r)
         else:
             raise NotImplementedError('cannot load file type of %s' %

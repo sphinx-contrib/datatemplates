@@ -13,9 +13,16 @@ source and the rendering template. It requires two parameters.
    ``template``
       The name of a template file on the Sphinx template search path.
 
-   ``csvheader`` (optional, CSV only)
-      Set to use first row of CSV as mapping keys for remaining rows.
-      If not set all rows are re read as sequences.
+   ``csvheader`` optional flag, CSV only
+      Set to use :py:class:`csv.DictReader` for reading the file.
+      If not set :py:func:`csv.reader` is used.
+
+   ``csvdialect`` optional, CSV only, either ``auto`` or one from :py:func:`csv.list_dialects`
+      Set to select a specific :py:class:`csv.Dialect`.
+      Set to ``auto``, to try autodetection.
+      If not set the default dialect is used.
+
+
 
 Template Context
 ================

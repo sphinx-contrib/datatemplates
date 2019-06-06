@@ -5,19 +5,32 @@
 Data File
 =========
 
-.. include:: sample.csv
-   :literal:
+.. literalinclude:: sample.csv
+   :language: text
+
 
 Template File
 =============
 
-.. include:: _templates/csv-sample.tmpl
-   :literal:
+.. literalinclude:: _templates/csv-sample.tmpl
+   :language: jinja
+
+Code
+=====
+
+.. code-block:: rst
+
+    .. datatemplate::
+        :source: sample.csv
+        :template: csv-sample.tmpl
+        :csvheaders:
+        :csvdialect: excel-tab
 
 Rendered Output
 ===============
 
-.. datatemplate::
-   :source: sample.csv
-   :template: csv-sample.tmpl
-   :csvheaders:
+    .. datatemplate::
+        :source: sample.csv
+        :template: csv-sample.tmpl
+        :csvheaders:
+        :csvdialect: excel-tab

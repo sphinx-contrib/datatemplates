@@ -32,9 +32,17 @@ import pkg_resources
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.intersphinx',
     'sphinx.ext.autodoc',
     'sphinxcontrib.datatemplates',
 ]
+
+# Support linking to Python Docs
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/', None),
+    'python3': ('https://docs.python.org/3', None),
+    'python2': ('https://docs.python.org/2', None)
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

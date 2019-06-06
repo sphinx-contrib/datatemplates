@@ -16,6 +16,7 @@ for Sphinx to render as part of its output.
    using
    json
    yaml
+   csv
    xml
 
 Indices and tables

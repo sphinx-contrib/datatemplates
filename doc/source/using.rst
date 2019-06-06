@@ -13,7 +13,20 @@ source and the rendering template. It requires two parameters.
    ``template``
       The name of a template file on the Sphinx template search path.
 
-While loaded YAML or JSON is quite straightforward to use, XML is loaded as an :py:class:`xml.etree.ElementTree.ElementTree`.
+
+   ``csvheader`` optional flag, CSV only
+      Set to use :py:class:`csv.DictReader` for reading the file.
+      If not set :py:func:`csv.reader` is used.
+
+   ``csvdialect`` optional, CSV only, either ``auto`` or one from :py:func:`csv.list_dialects`
+      Set to select a specific :py:class:`csv.Dialect`.
+      Set to ``auto``, to try autodetection.
+      If not set the default dialect is used.
+
+
+
+While the other formats are quite straightforward to use, XML is loaded as an :py:class:`xml.etree.ElementTree.ElementTree`.
+
 
 Template Context
 ================

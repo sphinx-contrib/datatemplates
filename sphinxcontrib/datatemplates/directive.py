@@ -7,6 +7,7 @@ from docutils.parsers import rst
 from docutils.statemachine import ViewList
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
+import csv
 import yaml
 
 from sphinxcontrib.datatemplates import helpers
@@ -19,6 +20,8 @@ class DataTemplate(rst.Directive):
     option_spec = {
         'source': rst.directives.unchanged,
         'template': rst.directives.unchanged,
+        'csvheaders': rst.directives.flag,
+        'csvdialect': (lambda argument:  rst.directives.choice(argument, ["auto"]+csv.list_dialects())),
     }
     has_content = False
 
@@ -30,8 +33,28 @@ class DataTemplate(rst.Directive):
         elif data_source.endswith('.json'):
             with open(filename, 'r') as f:
                 return json.load(f)
+        elif data_source.endswith('.csv'):
+            with open(filename, 'r', newline='') as f:
+                dialect=self.options.get('csvdialect')
+                if dialect == "auto":
+                    sample = f.read(8192)
+                    f.seek(0)
+                    sniffer = csv.Sniffer()
+                    dialect = sniffer.sniff(sample)
+                if 'csvheaders' in self.options:
+                    if dialect is None:
+                        r = csv.DictReader(f)
+                    else:
+                        r = csv.DictReader(f, dialect=dialect)
+                else:
+                    if dialect is None:
+                        r = csv.reader(f)
+                    else:
+                        r = csv.reader(f, dialect=dialect)
+                return list(r)
         elif "xml" in mimetypes.guess_type(data_source)[0]:
             return ET.parse(filename).getroot()
+
         else:
             raise NotImplementedError('cannot load file type of %s' %
                                       data_source)

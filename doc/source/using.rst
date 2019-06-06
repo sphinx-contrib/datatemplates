@@ -13,6 +13,8 @@ source and the rendering template. It requires two parameters.
    ``template``
       The name of a template file on the Sphinx template search path.
 
+While loaded YAML or JSON is quite straightforward to use, XML is loaded as an :py:class:`xml.etree.ElementTree.ElementTree`.
+
 Template Context
 ================
 

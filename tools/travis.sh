@@ -14,10 +14,7 @@ set -e
 
 case "$BUILD" in
     docs)
-        sphinx-build -W -b html doc/source doc/build;
-        sphinx-build -b json doc/source doc/build;
-        sphinx-build -b latex doc/source doc/build;
-        sphinx-build -b epub doc/source doc/build;;
+        sphinx-build -W -b html doc/source doc/build;;
     linter)
         flake8 sphinxcontrib setup.py;;
     *)

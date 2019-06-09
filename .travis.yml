@@ -1,18 +1,13 @@
 language: python
 
 python:
-  # FIXME(dhellmann): There aren't actually any tests, yet.
-  # - "3.6"
-  # - "3.7"
-  - "nightly"
+  - "3.6"
 
 sudo: false
 
 # Test the nightly build of cpython, but ignore any failures.
 # Add separate test environments for the docs and flake8 linter.
 matrix:
-  allow_failures:
-    - python: "nightly"
   include:
     - env: BUILD=docs
     - env: BUILD=linter

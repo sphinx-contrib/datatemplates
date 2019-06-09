@@ -16,7 +16,9 @@ case "$BUILD" in
     docs)
         sphinx-build -W -b html doc/source doc/build;;
     linter)
-        flake8 sphinxcontrib setup.py;;
+        flake8 sphinxcontrib setup.py;
+        python setup.py sdist;
+        twine check dist/*$(python setup.py --version)*;;
     *)
         python setup.py test \
                --coverage \

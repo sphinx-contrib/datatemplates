@@ -15,13 +15,17 @@ from sphinxcontrib.datatemplates import helpers
 LOG = logging.getLogger(__name__)
 
 
+def _handle_dialect_option(argument):
+    return rst.directives.choice(argument, ["auto"] + csv.list_dialects())
+
+
 class DataTemplate(rst.Directive):
 
     option_spec = {
         'source': rst.directives.unchanged,
         'template': rst.directives.unchanged,
         'csvheaders': rst.directives.flag,
-        'csvdialect': (lambda argument:  rst.directives.choice(argument, ["auto"]+csv.list_dialects())),
+        'csvdialect': _handle_dialect_option,
     }
     has_content = False
 
@@ -35,7 +39,7 @@ class DataTemplate(rst.Directive):
                 return json.load(f)
         elif data_source.endswith('.csv'):
             with open(filename, 'r', newline='') as f:
-                dialect=self.options.get('csvdialect')
+                dialect = self.options.get('csvdialect')
                 if dialect == "auto":
                     sample = f.read(8192)
                     f.seek(0)

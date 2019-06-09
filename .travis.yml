@@ -8,9 +8,6 @@ python:
 
 sudo: false
 
-before_install:
-  - go get golang.org/x/lint/golint
-
 # Test the nightly build of cpython, but ignore any failures.
 # Add separate test environments for the docs and flake8 linter.
 matrix:

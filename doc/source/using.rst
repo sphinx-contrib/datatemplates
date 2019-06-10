@@ -13,6 +13,9 @@ source and the rendering template. It requires two parameters.
    ``template``
       The name of a template file on the Sphinx template search path.
 
+   ``encoding`` optional, defaults to ``utf-8-sig``
+      The text encoding that will be used to read the source file. See :any:`standard-encodings`
+
 
    ``csvheader`` optional flag, CSV only
       Set to use :py:class:`csv.DictReader` for reading the file.

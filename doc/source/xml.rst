@@ -17,6 +17,6 @@ Template File
 Rendered Output
 ===============
 
-.. datatemplate::
+.. datatemplate-xml::
    :source: sample.xml
    :template: xml-sample.tmpl

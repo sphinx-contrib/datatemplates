@@ -114,3 +114,10 @@ class DataTemplateXML(DataTemplateBase):
     def _load_data(self, env, data_source):
         rel_filename, filename = env.relfn2path(data_source)
         return ET.parse(filename).getroot()
+
+
+class DataTemplateLegacy(DataTemplateYAML):
+    def run(self):
+        LOG.warning('Using the datatemplate directive is deprecated. '
+                    'Please use one of the format-specific variants.')
+        return super().run()

@@ -11,3 +11,4 @@ def setup(app):
     app.add_directive('datatemplate-yaml', directive.DataTemplateYAML)
     app.add_directive('datatemplate-csv', directive.DataTemplateCSV)
     app.add_directive('datatemplate-xml', directive.DataTemplateXML)
+    app.add_directive('datatemplate', directive.DataTemplateLegacy)

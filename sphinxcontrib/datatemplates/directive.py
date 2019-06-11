@@ -22,9 +22,12 @@ class DataTemplateBase(rst.Directive):
     }
     has_content = False
 
-    def _load_data(self, env, data_source):
+    def _load_data(self, resolved_path):
+        return NotImplemented
+
+    def _resolve_source_path(self, env, data_source):
         rel_filename, filename = env.relfn2path(data_source)
-        raise NotImplementedError('cannot load file type of %s' % data_source)
+        return filename
 
     def run(self):
         env = self.state.document.settings.env
@@ -41,7 +44,8 @@ class DataTemplateBase(rst.Directive):
         data_source = self.options['source']
         template_name = self.options['template']
 
-        data = self._load_data(env, data_source)
+        resolved_path = self._resolve_source_path(env, data_source)
+        data = self._load_data(resolved_path)
 
         context = {
             'make_list_table': helpers.make_list_table,
@@ -64,9 +68,8 @@ class DataTemplateBase(rst.Directive):
 
 
 class DataTemplateJSON(DataTemplateBase):
-    def _load_data(self, env, data_source):
-        rel_filename, filename = env.relfn2path(data_source)
-        with open(filename, 'r') as f:
+    def _load_data(self, resolved_path):
+        with open(resolved_path, 'r') as f:
             return json.load(f)
 
 
@@ -81,9 +84,8 @@ class DataTemplateCSV(DataTemplateBase):
             'dialect': _handle_dialect_option,
         })
 
-    def _load_data(self, env, data_source):
-        rel_filename, filename = env.relfn2path(data_source)
-        with open(filename, 'r', newline='') as f:
+    def _load_data(self, resolved_path):
+        with open(resolved_path, 'r', newline='') as f:
             dialect = self.options.get('dialect')
             if dialect == "auto":
                 sample = f.read(8192)
@@ -104,16 +106,14 @@ class DataTemplateCSV(DataTemplateBase):
 
 
 class DataTemplateYAML(DataTemplateBase):
-    def _load_data(self, env, data_source):
-        rel_filename, filename = env.relfn2path(data_source)
-        with open(filename, 'r') as f:
+    def _load_data(self, resolved_path):
+        with open(resolved_path, 'r') as f:
             return yaml.safe_load(f)
 
 
 class DataTemplateXML(DataTemplateBase):
-    def _load_data(self, env, data_source):
-        rel_filename, filename = env.relfn2path(data_source)
-        return ET.parse(filename).getroot()
+    def _load_data(self, resolved_path):
+        return ET.parse(resolved_path).getroot()
 
 
 class DataTemplateLegacy(DataTemplateYAML):

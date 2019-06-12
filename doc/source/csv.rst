@@ -20,17 +20,17 @@ Code
 
 .. code-block:: rst
 
-    .. datatemplate::
+    .. datatemplate-csv::
         :source: sample.csv
         :template: csv-sample.tmpl
-        :csvheaders:
-        :csvdialect: excel-tab
+        :headers:
+        :dialect: excel-tab
 
 Rendered Output
 ===============
 
-    .. datatemplate::
-        :source: sample.csv
-        :template: csv-sample.tmpl
-        :csvheaders:
-        :csvdialect: excel-tab
+.. datatemplate-csv::
+    :source: sample.csv
+    :template: csv-sample.tmpl
+    :headers:
+    :dialect: excel-tab

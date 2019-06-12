@@ -5,26 +5,81 @@
 The ``datatemplate`` directive is the interface between the data
 source and the rendering template. It requires two parameters.
 
-.. rst:directive:: datatemplate
+.. rst:directive:: datatemplate-json
+    
+   Load ``source`` via :py:func:`json.load`
 
-   ``source``
-      The source file, relative to the documentation build directory.
+   .. rst:directive:option:: source: source path, required
 
-   ``template``
-      The name of a template file on the Sphinx template search path.
+        The source file, relative to the documentation build directory.
 
-   ``encoding`` optional, defaults to ``utf-8-sig``
-      The text encoding that will be used to read the source file. See :any:`standard-encodings`
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
+        
+   .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+        The text encoding that will be used to read the source file. See :any:`standard-encodings`
+
+.. rst:directive:: datatemplate-yaml
+    
+   Load ``source`` via PyYAML_ (``yaml.safe_load``)
+
+   .. rst:directive:option:: source: source path, required
+
+        The source file, relative to the documentation build directory.
+
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
+        
+   .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+        The text encoding that will be used to read the source file. See :any:`standard-encodings`
+
+.. _PyYAML: https://pyyaml.org
+
+.. rst:directive:: datatemplate-xml
+    
+   Load ``source`` via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``)
+
+   .. rst:directive:option:: source: source path, required
+
+        The source file, relative to the documentation build directory.
+
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
+        
 
 
-   ``csvheader`` optional flag, CSV only
-      Set to use :py:class:`csv.DictReader` for reading the file.
-      If not set :py:func:`csv.reader` is used.
+.. rst:directive:: datatemplate-csv
+    
+   Load ``source`` via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header``
 
-   ``csvdialect`` optional, CSV only, either ``auto`` or one from :py:func:`csv.list_dialects`
-      Set to select a specific :py:class:`csv.Dialect`.
-      Set to ``auto``, to try autodetection.
-      If not set the default dialect is used.
+   .. rst:directive:option:: source: source path, required
+
+        The source file, relative to the documentation build directory.
+
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
+        
+   .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+        The text encoding that will be used to read the source file. See :any:`standard-encodings`
+
+   .. rst:directive:option:: header: flag, optional
+
+        Set to use :py:class:`csv.DictReader` for reading the file.
+        If not set :py:func:`csv.reader` is used.
+
+   .. rst:directive:option:: dialect: either ``auto`` or one from :py:func:`csv.list_dialects`, optional
+
+        Set to select a specific :py:class:`csv.Dialect`.
+        Set to ``auto``, to try autodetection.
+        If not set the default dialect is used.
+
 
 Template Context
 ================
@@ -33,29 +88,14 @@ When a ``datatemplate`` directive is processed, the data is passed to
 the template through its context so that the symbol ``data`` is
 available as a global variable.
 
-.. list-table::
-   :header-rows: 1
+.. important::
+    The data is loaded from the source and passed directly to the
+    template. No pre-processing is done on the data, so the template needs
+    to handle aspects like ``None`` values and fields that have values
+    that may interfere with parsing reStructuredText.
 
-   - * Format
-     * ``data`` type
-   - * JSON
-     * the object returned by ``json.safe_load()`` (varies based on
-       input)
-   - * YAML
-     * the object returned by the PyYAML_ function ``yaml.safe_load()``
-       (varies based on input)
-   - * XML
-     * :py:class:`xml.etree.ElementTree.ElementTree`
-   - * CSV
-     * ``list`` of ``tuple`` or ``dict`` (when ``csvheaders`` option
-       is specified)
 
-.. _PyYAML: https://pyyaml.org
 
-The data is loaded from the source and passed directly to the
-template. No pre-processing is done on the data, so the template needs
-to handle aspects like ``None`` values and fields that have values
-that may interfere with parsing reStructuredText.
 
 Template Helpers
 ================

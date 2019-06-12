@@ -17,6 +17,6 @@ Template File
 Rendered Output
 ===============
 
-.. datatemplate::
+.. datatemplate-yaml::
    :source: sample.yaml
    :template: sample.tmpl

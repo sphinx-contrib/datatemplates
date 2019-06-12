@@ -17,6 +17,6 @@ Template File
 Rendered Output
 ===============
 
-.. datatemplate::
+.. datatemplate-json::
    :source: sample.json
    :template: sample.tmpl

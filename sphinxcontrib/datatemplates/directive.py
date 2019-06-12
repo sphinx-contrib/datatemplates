@@ -135,7 +135,7 @@ def _handle_dialect_option(argument):
     return rst.directives.choice(argument, ["auto"] + csv.list_dialects())
 
 
-class DataTemplate(rst.Directive):
+class DataTemplateLegacy(rst.Directive):
 
     option_spec = {
         'source': rst.directives.unchanged,

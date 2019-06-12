@@ -16,6 +16,10 @@ source and the rendering template. It requires two parameters.
    .. rst:directive:option:: template: template name, required
 
         The name of a template file on the Sphinx template search path.
+        
+   .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+        The text encoding that will be used to read the source file. See :any:`standard-encodings`
 
 .. rst:directive:: datatemplate-yaml
     
@@ -28,6 +32,10 @@ source and the rendering template. It requires two parameters.
    .. rst:directive:option:: template: template name, required
 
         The name of a template file on the Sphinx template search path.
+        
+   .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+        The text encoding that will be used to read the source file. See :any:`standard-encodings`
 
 .. _PyYAML: https://pyyaml.org
 
@@ -42,6 +50,7 @@ source and the rendering template. It requires two parameters.
    .. rst:directive:option:: template: template name, required
 
         The name of a template file on the Sphinx template search path.
+        
 
 
 .. rst:directive:: datatemplate-csv
@@ -55,6 +64,10 @@ source and the rendering template. It requires two parameters.
    .. rst:directive:option:: template: template name, required
 
         The name of a template file on the Sphinx template search path.
+        
+   .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+        The text encoding that will be used to read the source file. See :any:`standard-encodings`
 
    .. rst:directive:option:: header: flag, optional
 

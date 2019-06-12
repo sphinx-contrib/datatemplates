@@ -1,6 +1,7 @@
 import json
 import csv
 import mimetypes
+import codecs
 
 import defusedxml.ElementTree as ET
 import yaml
@@ -68,9 +69,17 @@ class DataTemplateBase(rst.Directive):
         return node.children
 
 
-class DataTemplateJSON(DataTemplateBase):
+class DataTemplateWithEncoding(DataTemplateBase):
+    option_spec = dict(DataTemplateBase.option_spec, **{
+        'encoding': rst.directives.unchanged,
+    })
+
+
+class DataTemplateJSON(DataTemplateWithEncoding):
     def _load_data(self, resolved_path):
-        with open(resolved_path, 'r') as f:
+        with open(resolved_path,
+                  'r',
+                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
             return json.load(f)
 
 
@@ -78,7 +87,7 @@ def _handle_dialect_option(argument):
     return rst.directives.choice(argument, ["auto"] + csv.list_dialects())
 
 
-class DataTemplateCSV(DataTemplateBase):
+class DataTemplateCSV(DataTemplateWithEncoding):
     option_spec = dict(
         DataTemplateBase.option_spec, **{
             'headers': rst.directives.flag,
@@ -86,7 +95,10 @@ class DataTemplateCSV(DataTemplateBase):
         })
 
     def _load_data(self, resolved_path):
-        with open(resolved_path, 'r', newline='') as f:
+        with open(resolved_path,
+                  'r',
+                  newline='',
+                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
             dialect = self.options.get('dialect')
             if dialect == "auto":
                 sample = f.read(8192)
@@ -106,15 +118,21 @@ class DataTemplateCSV(DataTemplateBase):
             return list(r)
 
 
-class DataTemplateYAML(DataTemplateBase):
+class DataTemplateYAML(DataTemplateWithEncoding):
     def _load_data(self, resolved_path):
-        with open(resolved_path, 'r') as f:
+        with open(resolved_path,
+                  'r',
+                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
             return yaml.safe_load(f)
 
 
 class DataTemplateXML(DataTemplateBase):
     def _load_data(self, resolved_path):
         return ET.parse(resolved_path).getroot()
+
+
+def _handle_dialect_option(argument):
+    return rst.directives.choice(argument, ["auto"] + csv.list_dialects())
 
 
 class DataTemplateLegacy(rst.Directive):
@@ -124,46 +142,72 @@ class DataTemplateLegacy(rst.Directive):
         'template': rst.directives.unchanged,
         'csvheaders': rst.directives.flag,
         'csvdialect': _handle_dialect_option,
+        'encoding': rst.directives.unchanged,
     }
     has_content = False
 
-    def _load_data(self, env, data_source):
+    def _load_csv(self, filename, encoding):
+        try:
+            if encoding is None:
+                f = open(filename, 'r', newline='')
+            else:
+                f = codecs.open(filename, 'r', newline='', encoding=encoding)
+            dialect = self.options.get('csvdialect')
+            if dialect == "auto":
+                sample = f.read(8192)
+                f.seek(0)
+                sniffer = csv.Sniffer()
+                dialect = sniffer.sniff(sample)
+            if 'csvheaders' in self.options:
+                if dialect is None:
+                    r = csv.DictReader(f)
+                else:
+                    r = csv.DictReader(f, dialect=dialect)
+            else:
+                if dialect is None:
+                    r = csv.reader(f)
+                else:
+                    r = csv.reader(f, dialect=dialect)
+            return list(r)
+        finally:
+            f.close()
+
+    def _load_json(self, filename, encoding):
+        try:
+            if encoding is None:
+                f = open(filename, 'r')
+            else:
+                f = codecs.open(filename, 'r', encoding=encoding)
+            return json.load(f)
+        finally:
+            f.close()
+
+    def _load_yaml(self, filename, encoding):
+        try:
+            if encoding is None:
+                f = open(filename, 'r')
+            else:
+                f = codecs.open(filename, 'r', encoding=encoding)
+            return yaml.safe_load(f)
+        finally:
+            f.close()
+
+    def _load_data(self, env, data_source, encoding):
         rel_filename, filename = env.relfn2path(data_source)
         if data_source.endswith('.yaml'):
-            with open(filename, 'r') as f:
-                return yaml.safe_load(f)
+            return self._load_yaml(filename, encoding)
         elif data_source.endswith('.json'):
-            with open(filename, 'r') as f:
-                return json.load(f)
+            return self._load_json(filename, encoding)
         elif data_source.endswith('.csv'):
-            with open(filename, 'r', newline='') as f:
-                dialect = self.options.get('csvdialect')
-                if dialect == "auto":
-                    sample = f.read(8192)
-                    f.seek(0)
-                    sniffer = csv.Sniffer()
-                    dialect = sniffer.sniff(sample)
-                if 'csvheaders' in self.options:
-                    if dialect is None:
-                        r = csv.DictReader(f)
-                    else:
-                        r = csv.DictReader(f, dialect=dialect)
-                else:
-                    if dialect is None:
-                        r = csv.reader(f)
-                    else:
-                        r = csv.reader(f, dialect=dialect)
-                return list(r)
+            return self._load_csv(filename, encoding)
         elif "xml" in mimetypes.guess_type(data_source)[0]:
+            # there are many XML based formats
             return ET.parse(filename).getroot()
-
         else:
             raise NotImplementedError('cannot load file type of %s' %
                                       data_source)
 
     def run(self):
-        LOG.warning('Using the datatemplate directive is deprecated. '
-                    'Please use one of the format-specific variants.')
         env = self.state.document.settings.env
         app = env.app
         builder = app.builder
@@ -193,7 +237,9 @@ class DataTemplateLegacy(rst.Directive):
                 line=self.lineno)
             return [error]
 
-        data = self._load_data(env, data_source)
+        encoding = self.options.get('encoding', None)
+
+        data = self._load_data(env, data_source, encoding)
 
         context = {
             'make_list_table': helpers.make_list_table,

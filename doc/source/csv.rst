@@ -20,7 +20,7 @@ Code
 
 .. code-block:: rst
 
-    .. datatemplate-csv::
+    .. datatemplate:csv::
         :source: sample.csv
         :template: csv-sample.tmpl
         :headers:
@@ -29,7 +29,7 @@ Code
 Rendered Output
 ===============
 
-.. datatemplate-csv::
+.. datatemplate:csv::
     :source: sample.csv
     :template: csv-sample.tmpl
     :headers:

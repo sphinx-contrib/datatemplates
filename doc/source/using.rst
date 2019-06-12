@@ -5,7 +5,7 @@
 The ``datatemplate`` directive is the interface between the data
 source and the rendering template. It requires two parameters.
 
-.. rst:directive:: datatemplate-json
+.. rst:directive:: datatemplate:json
     
    Load ``source`` via :py:func:`json.load`
 
@@ -17,7 +17,7 @@ source and the rendering template. It requires two parameters.
 
         The name of a template file on the Sphinx template search path.
 
-.. rst:directive:: datatemplate-yaml
+.. rst:directive:: datatemplate:yaml
     
    Load ``source`` via PyYAML_ (``yaml.safe_load``)
 
@@ -31,7 +31,7 @@ source and the rendering template. It requires two parameters.
 
 .. _PyYAML: https://pyyaml.org
 
-.. rst:directive:: datatemplate-xml
+.. rst:directive:: datatemplate:xml
     
    Load ``source`` via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``)
 
@@ -44,7 +44,7 @@ source and the rendering template. It requires two parameters.
         The name of a template file on the Sphinx template search path.
 
 
-.. rst:directive:: datatemplate-csv
+.. rst:directive:: datatemplate:csv
     
    Load ``source`` via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header``
 

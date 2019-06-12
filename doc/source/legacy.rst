@@ -1,6 +1,9 @@
-==============
- YAML Samples
-==============
+================
+ Legacy Samples
+================
+
+The ``datatemplate`` directive is should no longer be used. It is
+deprecated, and will be removed in the next release.
 
 Data File
 =========
@@ -17,6 +20,6 @@ Template File
 Rendered Output
 ===============
 
-.. datatemplate:yaml::
+.. datatemplate::
    :source: sample.yaml
    :template: sample.tmpl

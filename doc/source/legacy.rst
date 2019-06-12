@@ -2,8 +2,8 @@
  Legacy Samples
 ================
 
-The ``datatemplate`` directive is deprecated and should no longer be
-used.
+The ``datatemplate`` directive is should no longer be used. It is
+deprecated, and will be removed in the next release.
 
 Data File
 =========

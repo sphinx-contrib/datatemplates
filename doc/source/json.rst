@@ -14,6 +14,15 @@ Template File
 .. include:: _templates/sample.tmpl
    :literal:
 
+Loading the Template
+====================
+
+.. code-block:: rst
+
+   .. datatemplate:json::
+      :source: sample.json
+      :template: sample.tmpl
+
 Rendered Output
 ===============
 

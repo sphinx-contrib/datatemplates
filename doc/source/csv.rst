@@ -15,8 +15,8 @@ Template File
 .. literalinclude:: _templates/csv-sample.tmpl
    :language: jinja
 
-Code
-=====
+Loading the Template
+====================
 
 .. code-block:: rst
 

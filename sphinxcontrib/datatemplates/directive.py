@@ -29,8 +29,9 @@ class DataTemplateBase(rst.Directive):
     def _load_data(self, resolved_path):
         return NotImplemented
 
+    @contextlib.contextmanager
     def _load_data_cm(self, resolved_path):
-        return contextlib.nullcontext(self._load_data(resolved_path))
+        yield self._load_data(resolved_path)
 
     def _resolve_source_path(self, env, data_source):
         rel_filename, filename = env.relfn2path(data_source)

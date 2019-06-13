@@ -37,6 +37,10 @@ source and the rendering template. It requires two parameters.
 
         The text encoding that will be used to read the source file. See :any:`standard-encodings`
 
+   .. rst:directive:option:: multiple-documents: flag, optional
+
+        Set to read multiple documents from the file into a :py:class:`tuple`
+
 .. _PyYAML: https://pyyaml.org
 
 .. rst:directive:: datatemplate:xml

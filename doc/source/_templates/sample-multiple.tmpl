@@ -1,0 +1,32 @@
+.. -*- mode: rst -*-
+
+Static Heading
+--------------
+
+Individual Item
+~~~~~~~~~~~~~~~
+
+{{ data[0]|tojson }}
+
+List of Items
+~~~~~~~~~~~~~
+
+{% for item in data %}
+- {{item|tojson}}
+  
+  - {{item.key}}
+  - {{item.key1}}
+{% endfor %}
+
+
+Mapping Series Table
+~~~~~~~~~~~~~~~~~~~~
+
+Rendering a table from a list of nested dictionaries using dynamic
+headers.
+
+{{ make_list_table_from_mappings(
+    [('Key', 'key'), ('Key One', 'key1')],
+    data,
+    title='Table from series of mappings',
+    ) }}

@@ -2,6 +2,9 @@
  YAML Samples
 ==============
 
+Single Document
++++++++++++++++
+
 Data File
 =========
 
@@ -29,3 +32,38 @@ Rendered Output
 .. datatemplate:yaml::
    :source: sample.yaml
    :template: sample.tmpl
+
+
+Multiple Documents
+++++++++++++++++++
+
+
+Data File
+=========
+
+.. include:: sample-multiple.yaml
+   :literal:
+
+Template File
+=============
+
+.. include:: _templates/sample-multiple.tmpl
+   :literal:
+
+Loading the Template
+====================
+
+.. code-block:: rst
+
+   .. datatemplate:yaml::
+      :source: sample-multiple.yaml
+      :template: sample-multiple.tmpl
+      :multiple-documents:
+
+Rendered Output
+===============
+
+.. datatemplate:yaml::
+   :source: sample-multiple.yaml
+   :template: sample-multiple.tmpl
+   :multiple-documents:

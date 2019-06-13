@@ -51,7 +51,18 @@ source and the rendering template. It requires two parameters.
 
         The name of a template file on the Sphinx template search path.
         
+.. rst:directive:: datatemplate:scandir
+    
+   Load ``source`` via :py:func:`os.scandir`.
+   In the template, ``data`` is an :term:`iterator`
 
+   .. rst:directive:option:: source: source path, required
+
+        The source directory, relative to the documentation build directory.
+
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
 
 .. rst:directive:: datatemplate:csv
     

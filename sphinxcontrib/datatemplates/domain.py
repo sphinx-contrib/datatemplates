@@ -11,6 +11,7 @@ class DataTemplateDomain(Domain):
         'yaml': directive.DataTemplateYAML,
         'csv': directive.DataTemplateCSV,
         'xml': directive.DataTemplateXML,
+        'scandir': directive.DataTemplateScandir,
     }
 
     def get_objects(self):

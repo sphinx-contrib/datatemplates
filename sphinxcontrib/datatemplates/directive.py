@@ -2,7 +2,7 @@ import json
 import csv
 import mimetypes
 import codecs
-
+import os
 import defusedxml.ElementTree as ET
 import yaml
 from docutils import nodes
@@ -129,6 +129,11 @@ class DataTemplateYAML(DataTemplateWithEncoding):
 class DataTemplateXML(DataTemplateBase):
     def _load_data(self, resolved_path):
         return ET.parse(resolved_path).getroot()
+
+
+class DataTemplateScandir(DataTemplateBase):
+    def _load_data(self, resolved_path):
+        return os.scandir(resolved_path)
 
 
 def _handle_dialect_option(argument):

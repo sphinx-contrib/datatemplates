@@ -18,6 +18,7 @@ for Sphinx to render as part of its output.
    yaml
    csv
    xml
+   scandir
    legacy
 
 Indices and tables

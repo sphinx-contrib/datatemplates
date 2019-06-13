@@ -1,0 +1,12 @@
+.. -*- mode: rst -*-
+
+Static Heading
+--------------
+
+List of Entries
+~~~~~~~~~~~~~~~
+
+{% for item in data %}
+- {{item.name}}'s size is {{item.stat().st_size}} Bytes
+{% endfor %}
+

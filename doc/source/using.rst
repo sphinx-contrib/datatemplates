@@ -84,6 +84,18 @@ source and the rendering template. It requires two parameters.
         Set to ``auto``, to try autodetection.
         If not set the default dialect is used.
 
+.. rst:directive:: datatemplate:dbm
+    
+   Load ``source`` via :py:func:`dbm.open`
+
+   .. rst:directive:option:: source: source path, required
+
+        The source file (without extension), relative to the documentation build directory.
+
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
+        
 
 Template Context
 ================

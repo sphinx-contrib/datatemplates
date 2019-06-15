@@ -1,10 +1,12 @@
 import json
 import csv
-import mimetypes
-import codecs
-
 import defusedxml.ElementTree as ET
 import yaml
+import dbm
+import contextlib
+
+import mimetypes
+import codecs
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
@@ -27,9 +29,21 @@ class DataTemplateBase(rst.Directive):
     def _load_data(self, resolved_path):
         return NotImplemented
 
+    @contextlib.contextmanager
+    def _load_data_cm(self, resolved_path):
+        yield self._load_data(resolved_path)
+
     def _resolve_source_path(self, env, data_source):
         rel_filename, filename = env.relfn2path(data_source)
         return filename
+
+    def _make_context(self, data):
+        return {
+            'make_list_table': helpers.make_list_table,
+            'make_list_table_from_mappings':
+            helpers.make_list_table_from_mappings,
+            'data': data,
+        }
 
     def run(self):
         env = self.state.document.settings.env
@@ -47,18 +61,12 @@ class DataTemplateBase(rst.Directive):
         template_name = self.options['template']
 
         resolved_path = self._resolve_source_path(env, data_source)
-        data = self._load_data(resolved_path)
-
-        context = {
-            'make_list_table': helpers.make_list_table,
-            'make_list_table_from_mappings':
-            helpers.make_list_table_from_mappings,
-            'data': data,
-        }
-        rendered_template = builder.templates.render(
-            template_name,
-            context,
-        )
+        with self._load_data_cm(resolved_path) as data:
+            context = self._make_context(data)
+            rendered_template = builder.templates.render(
+                template_name,
+                context,
+            )
 
         result = ViewList()
         for line in rendered_template.splitlines():
@@ -137,6 +145,11 @@ class DataTemplateYAML(DataTemplateWithEncoding):
 class DataTemplateXML(DataTemplateBase):
     def _load_data(self, resolved_path):
         return ET.parse(resolved_path).getroot()
+
+
+class DataTemplateDBM(DataTemplateBase):
+    def _load_data_cm(self, resolved_path):
+        return dbm.open(resolved_path, "r")
 
 
 def _handle_dialect_option(argument):

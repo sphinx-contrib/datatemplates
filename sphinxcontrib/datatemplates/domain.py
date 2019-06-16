@@ -11,7 +11,7 @@ class DataTemplateDomain(Domain):
         'yaml': directive.DataTemplateYAML,
         'csv': directive.DataTemplateCSV,
         'xml': directive.DataTemplateXML,
-        'dbm': directive.DataTemplateDBM,        
+        'dbm': directive.DataTemplateDBM,
         'import-module': directive.DataTemplateImportModule,
     }
 

@@ -1,0 +1,17 @@
+.. -*- mode: rst -*-
+
+Static Heading
+--------------
+
+List of Directory Entries
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{% for item in data.scandir() %}
+- {{item.name}}'s size is {{item.stat().st_size}} Bytes
+{% endfor %}
+
+File Path of the Null Device
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``{{data.devnull}}``
+

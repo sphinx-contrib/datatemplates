@@ -55,6 +55,17 @@ source and the rendering template. It requires two parameters.
 
         The name of a template file on the Sphinx template search path.
         
+.. rst:directive:: datatemplate:import-module
+    
+   Load ``source`` via :py:func:`importlib.import_module`
+
+   .. rst:directive:option:: source: module name, required
+
+        Name of the module to import, must be importable in ``conf.py``
+
+   .. rst:directive:option:: template: template name, required
+
+        The name of a template file on the Sphinx template search path.
 
 
 .. rst:directive:: datatemplate:csv

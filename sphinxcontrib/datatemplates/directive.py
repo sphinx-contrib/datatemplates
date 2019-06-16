@@ -136,7 +136,7 @@ class DataTemplateYAML(DataTemplateWithEncoding):
                   'r',
                   encoding=self.options.get('encoding', 'utf-8-sig')) as f:
             if 'multiple-documents' in self.options:
-                return tuple(
+                return list(
                     yaml.safe_load_all(f)
                 )  # force loading all documents now so the file can be closed
             return yaml.safe_load(f)

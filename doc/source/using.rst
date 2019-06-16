@@ -39,7 +39,7 @@ source and the rendering template. It requires two parameters.
 
    .. rst:directive:option:: multiple-documents: flag, optional
 
-        Set to read multiple documents from the file into a :py:class:`tuple`
+        Set to read multiple documents from the file into a :py:class:`list`
 
 .. _PyYAML: https://pyyaml.org
 

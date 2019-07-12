@@ -4,18 +4,38 @@ import defusedxml.ElementTree as ET
 import yaml
 import dbm
 import contextlib
-
 import mimetypes
 import codecs
+
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
+from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
 
 from sphinxcontrib.datatemplates import helpers
 
 LOG = logging.getLogger(__name__)
+_default_templates = None
+
+
+def _templates(builder):
+    global _default_templates
+
+    # Some builders have no templates manager at all, and some
+    # have the attribute set to None.
+    templates = getattr(builder, 'templates', None)
+
+    if not templates:
+        if not _default_templates:
+            # Initialize default templates manager once
+            _default_templates = BuiltinTemplateLoader()
+            _default_templates.init(builder)
+
+        templates = _default_templates
+
+    return templates
 
 
 class DataTemplateBase(rst.Directive):
@@ -49,13 +69,6 @@ class DataTemplateBase(rst.Directive):
         env = self.state.document.settings.env
         app = env.app
         builder = app.builder
-        # Some builders have no templates manager at all, and some
-        # have the attribute set to None.
-        templates = getattr(builder, 'templates', None)
-        if not templates:
-            LOG.warn('The builder has no template manager, '
-                     'ignoring the datatemplate directive.')
-            return []
 
         data_source = self.options['source']
         template_name = self.options['template']
@@ -63,7 +76,7 @@ class DataTemplateBase(rst.Directive):
         resolved_path = self._resolve_source_path(env, data_source)
         with self._load_data_cm(resolved_path) as data:
             context = self._make_context(data)
-            rendered_template = builder.templates.render(
+            rendered_template = _templates(builder).render(
                 template_name,
                 context,
             )
@@ -232,13 +245,6 @@ class DataTemplateLegacy(rst.Directive):
         env = self.state.document.settings.env
         app = env.app
         builder = app.builder
-        # Some builders have no templates manager at all, and some
-        # have the attribute set to None.
-        templates = getattr(builder, 'templates', None)
-        if not templates:
-            LOG.warn('The builder has no template manager, '
-                     'ignoring the datatemplate directive.')
-            return []
 
         try:
             data_source = self.options['source']
@@ -268,7 +274,7 @@ class DataTemplateLegacy(rst.Directive):
             helpers.make_list_table_from_mappings,
             'data': data,
         }
-        rendered_template = builder.templates.render(
+        rendered_template = _templates(builder).render(
             template_name,
             context,
         )

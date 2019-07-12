@@ -4,12 +4,13 @@ import defusedxml.ElementTree as ET
 import yaml
 import dbm
 import contextlib
-
 import mimetypes
 import codecs
+
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
+from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
 
@@ -28,7 +29,7 @@ def _templates(builder):
 
     if not templates:
         if not _default_templates:
-            from sphinx.jinja2glue import BuiltinTemplateLoader
+            # Initialize default templates manager once
             _default_templates = BuiltinTemplateLoader()
             _default_templates.init(builder)
 

@@ -12,6 +12,7 @@ class DataTemplateDomain(Domain):
         'csv': directive.DataTemplateCSV,
         'xml': directive.DataTemplateXML,
         'dbm': directive.DataTemplateDBM,
+        'import-module': directive.DataTemplateImportModule,
     }
 
     def get_objects(self):

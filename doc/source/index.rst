@@ -15,9 +15,10 @@ for Sphinx to render as part of its output.
 
    using
    json
-   yaml
-   csv
+   yaml  
    xml
+   import-module
+   csv
    dbm
    legacy
 

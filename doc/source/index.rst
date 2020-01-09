@@ -20,6 +20,7 @@ for Sphinx to render as part of its output.
    import-module
    csv
    dbm
+   inline
    legacy
 
 Indices and tables

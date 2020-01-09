@@ -44,9 +44,10 @@ class DataTemplateBase(rst.Directive):
     optional_arguments = 1
     final_argument_whitespace = True
     option_spec = {
-        'template': rst.directives.unchanged_required,
+        'source': rst.directives.unchanged,
+        'template': rst.directives.unchanged,
     }
-    has_content = False
+    has_content = True
 
     def _load_data(self, resolved_path):
         return NotImplemented
@@ -72,14 +73,24 @@ class DataTemplateBase(rst.Directive):
         app = env.app
         builder = app.builder
 
-        data_source = self.arguments[0]
-        template_name = self.options['template']
+        if 'source' in self.options:
+            data_source = self.options['source']
+        else:
+            data_source = self.arguments[0]
 
         resolved_path = self._resolve_source_path(env, data_source)
+
+        if 'template' in self.options:
+            template = self.options['template']
+            render_function = _templates(builder).render
+        else:
+            template = '\n'.join(self.content)
+            render_function = _templates(builder).render_string
+
         with self._load_data_cm(resolved_path) as data:
             context = self._make_context(data)
-            rendered_template = _templates(builder).render(
-                template_name,
+            rendered_template = render_function(
+                template,
                 context,
             )
 

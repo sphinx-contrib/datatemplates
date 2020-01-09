@@ -20,8 +20,7 @@ Loading the Template
 
 .. code-block:: rst
 
-    .. datatemplate:csv::
-        :source: sample.csv
+    .. datatemplate:csv:: sample.csv
         :template: csv-sample.tmpl
         :headers:
         :dialect: excel-tab
@@ -29,8 +28,7 @@ Loading the Template
 Rendered Output
 ===============
 
-.. datatemplate:csv::
-    :source: sample.csv
+.. datatemplate:csv:: sample.csv
     :template: csv-sample.tmpl
     :headers:
     :dialect: excel-tab

@@ -5,13 +5,9 @@
 The ``datatemplate`` directive is the interface between the data
 source and the rendering template. It requires two parameters.
 
-.. rst:directive:: datatemplate:json
+.. rst:directive:: .. datatemplate:json:: source-path
     
-   Load ``source`` via :py:func:`json.load`
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory) via :py:func:`json.load`
 
    .. rst:directive:option:: template: template name, required
 
@@ -21,17 +17,9 @@ source and the rendering template. It requires two parameters.
 
         The text encoding that will be used to read the source file. See :any:`standard-encodings`
 
-.. rst:directive:: datatemplate:yaml
+.. rst:directive:: .. datatemplate:yaml:: source-path
     
-   Load ``source`` via PyYAML_ (``yaml.safe_load``)
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
-
-   .. rst:directive:option:: template: template name, required
-
-        The name of a template file on the Sphinx template search path.
+   Load file at ``source-path`` (relative to the documentation build directory)  via PyYAML_ (``yaml.safe_load``)
         
    .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
 
@@ -43,38 +31,26 @@ source and the rendering template. It requires two parameters.
 
 .. _PyYAML: https://pyyaml.org
 
-.. rst:directive:: datatemplate:xml
+.. rst:directive:: .. datatemplate:xml:: source-path
     
-   Load ``source`` via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``)
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory)  via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``)
 
    .. rst:directive:option:: template: template name, required
 
         The name of a template file on the Sphinx template search path.
         
-.. rst:directive:: datatemplate:import-module
+.. rst:directive:: .. datatemplate:import-module:: module-name
     
-   Load ``source`` via :py:func:`importlib.import_module`
-
-   .. rst:directive:option:: source: module name, required
-
-        Name of the module to import, must be importable in ``conf.py``
+   Load module ``module-name`` (must be importable in ``conf.py``)  via :py:func:`importlib.import_module`
 
    .. rst:directive:option:: template: template name, required
 
         The name of a template file on the Sphinx template search path.
 
 
-.. rst:directive:: datatemplate:csv
+.. rst:directive:: .. datatemplate:csv:: source-path
     
-   Load ``source`` via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header``
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory) via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header``
 
    .. rst:directive:option:: template: template name, required
 
@@ -95,13 +71,9 @@ source and the rendering template. It requires two parameters.
         Set to ``auto``, to try autodetection.
         If not set the default dialect is used.
 
-.. rst:directive:: datatemplate:dbm
+.. rst:directive:: datatemplate:dbm:: source-path
     
-   Load ``source`` via :py:func:`dbm.open`
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file (without extension), relative to the documentation build directory.
+   Load DB at ``source-path`` (relative to the documentation build directory)  via :py:func:`dbm.open`
 
    .. rst:directive:option:: template: template name, required
 

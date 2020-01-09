@@ -3,19 +3,19 @@
 ====================
 
 The ``datatemplate`` directive is the interface between the data
-source and the rendering template. It requires two parameters.
+source and the rendering template.
 
 .. rst:directive:: datatemplate:json
     
-   Load ``source`` via :py:func:`json.load`
+   Load ``source`` via :py:func:`json.load` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: source: source path, required
 
         The source file, relative to the documentation build directory.
 
-   .. rst:directive:option:: template: template name, required
+   .. rst:directive:option:: template: template name, optional
 
-        The name of a template file on the Sphinx template search path.
+        The name of a template file on the Sphinx template search path. Overrides directive body.
         
    .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
 
@@ -23,15 +23,15 @@ source and the rendering template. It requires two parameters.
 
 .. rst:directive:: datatemplate:yaml
     
-   Load ``source`` via PyYAML_ (``yaml.safe_load``)
+   Load ``source`` via PyYAML_ (``yaml.safe_load``) and render using ``template`` given in directive body.
 
    .. rst:directive:option:: source: source path, required
 
         The source file, relative to the documentation build directory.
 
-   .. rst:directive:option:: template: template name, required
+   .. rst:directive:option:: template: template name, optional
 
-        The name of a template file on the Sphinx template search path.
+        The name of a template file on the Sphinx template search path. Overrides directive body.
         
    .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
 
@@ -45,40 +45,40 @@ source and the rendering template. It requires two parameters.
 
 .. rst:directive:: datatemplate:xml
     
-   Load ``source`` via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``)
+   Load ``source`` via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``) and render using ``template`` given in directive body.
 
    .. rst:directive:option:: source: source path, required
 
         The source file, relative to the documentation build directory.
 
-   .. rst:directive:option:: template: template name, required
+   .. rst:directive:option:: template: template name, optional
 
-        The name of a template file on the Sphinx template search path.
+        The name of a template file on the Sphinx template search path. Overrides directive body.
         
 .. rst:directive:: datatemplate:import-module
     
-   Load ``source`` via :py:func:`importlib.import_module`
+   Load ``source`` via :py:func:`importlib.import_module` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: source: module name, required
 
         Name of the module to import, must be importable in ``conf.py``
 
-   .. rst:directive:option:: template: template name, required
+   .. rst:directive:option:: template: template name, optional
 
-        The name of a template file on the Sphinx template search path.
+        The name of a template file on the Sphinx template search path. Overrides directive body.
 
 
 .. rst:directive:: datatemplate:csv
     
-   Load ``source`` via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header``
+   Load ``source`` via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header`` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: source: source path, required
 
         The source file, relative to the documentation build directory.
 
-   .. rst:directive:option:: template: template name, required
+   .. rst:directive:option:: template: template name, optional
 
-        The name of a template file on the Sphinx template search path.
+        The name of a template file on the Sphinx template search path. Overrides directive body.
         
    .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
 
@@ -97,15 +97,15 @@ source and the rendering template. It requires two parameters.
 
 .. rst:directive:: datatemplate:dbm
     
-   Load ``source`` via :py:func:`dbm.open`
+   Load ``source`` via :py:func:`dbm.open` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: source: source path, required
 
         The source file (without extension), relative to the documentation build directory.
 
-   .. rst:directive:option:: template: template name, required
+   .. rst:directive:option:: template: template name, optional
 
-        The name of a template file on the Sphinx template search path.
+        The name of a template file on the Sphinx template search path. Overrides directive body.
         
 
 Template Context

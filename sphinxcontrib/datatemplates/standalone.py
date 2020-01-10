@@ -8,9 +8,10 @@ class DataTemplateStandalone:
 
     def __init__(self, env, options={}):
         self.env = env
+        os = self.option_spec
         self.options = {
-            k: v(options.get(k, None))
-            for k, v in self.option_spec.items()
+            k: os[k](v) if k in os else v
+            for k, v in options.items()
         }
 
     def run(self):

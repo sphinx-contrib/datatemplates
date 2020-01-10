@@ -7,12 +7,12 @@ class DataTemplateDomain(Domain):
     name = 'datatemplate'
     label = 'DataTemplate Replacement'
     directives = {
-        'json': directive.DataTemplateJSON,
-        'yaml': directive.DataTemplateYAML,
-        'csv': directive.DataTemplateCSV,
-        'xml': directive.DataTemplateXML,
-        'dbm': directive.DataTemplateDBM,
-        'import-module': directive.DataTemplateImportModule,
+        'json': directive.DataTemplateJSONDirective,
+        'yaml': directive.DataTemplateYAMLDirective,
+        'csv': directive.DataTemplateCSVDirective,
+        'xml': directive.DataTemplateXMLDirective,
+        'dbm': directive.DataTemplateDBMDirective,
+        'import-module': directive.DataTemplateImportModuleDirective,
     }
 
     def get_objects(self):

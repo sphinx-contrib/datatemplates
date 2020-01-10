@@ -16,8 +16,10 @@ def main():
     subparsers = parser.add_subparsers(title="subcommand", dest="cmd")
     for name, dt in standalone.datatemplate_names.items():
         p = subparsers.add_parser(name)
-        for option_name in dt.option_spec.keys():
-            p.add_argument("--" + option_name, default=argparse.SUPPRESS)
+        for option_name, validator in dt.option_spec.items():
+            p.add_argument("--" + option_name,
+                           help="Validation: %s" % validator.__doc__,
+                           default=argparse.SUPPRESS)
 
     args = parser.parse_args()
 

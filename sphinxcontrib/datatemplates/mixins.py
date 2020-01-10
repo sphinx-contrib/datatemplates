@@ -16,8 +16,8 @@ LOG = logging.getLogger(__name__)
 
 class AbstractDataTemplateBase:
     option_spec = {
-        'source': rst.directives.unchanged,
-        'template': rst.directives.unchanged,
+        'source': rst.directives.unchanged_required,
+        'template': rst.directives.unchanged_required,
     }
 
     def _load_data(self, resolved_path):
@@ -38,7 +38,7 @@ class AbstractDataTemplateBase:
 
 class AbstractDataTemplateWithEncoding(AbstractDataTemplateBase):
     option_spec = dict(AbstractDataTemplateBase.option_spec, **{
-        'encoding': rst.directives.unchanged,
+        'encoding': rst.directives.unchanged_required,
     })
 
 

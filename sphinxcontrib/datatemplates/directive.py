@@ -41,8 +41,10 @@ def _templates(builder):
 
 class DataTemplateBase(rst.Directive):
 
+    optional_arguments = 1
+    final_argument_whitespace = True
     option_spec = {
-        'source': rst.directives.unchanged_required,
+        'source': rst.directives.unchanged,
         'template': rst.directives.unchanged,
     }
     has_content = True
@@ -71,7 +73,11 @@ class DataTemplateBase(rst.Directive):
         app = env.app
         builder = app.builder
 
-        data_source = self.options['source']
+        if 'source' in self.options:
+            data_source = self.options['source']
+        else:
+            data_source = self.arguments[0]
+
         resolved_path = self._resolve_source_path(env, data_source)
 
         if 'template' in self.options:

@@ -19,13 +19,11 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:dbm::
-      :source: sampledbm
+   .. datatemplate:dbm:: sampledbm
       :template: dbm-sample.tmpl
 
 Rendered Output
 ===============
 
-.. datatemplate:dbm::
-   :source: sampledbm
+.. datatemplate:dbm:: sampledbm
    :template: dbm-sample.tmpl

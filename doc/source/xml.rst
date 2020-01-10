@@ -19,13 +19,11 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:xml::
-      :source: sample.xml
+   .. datatemplate:xml:: sample.xml
       :template: xml-sample.tmpl
 
 Rendered Output
 ===============
 
-.. datatemplate:xml::
-   :source: sample.xml
+.. datatemplate:xml:: sample.xml
    :template: xml-sample.tmpl

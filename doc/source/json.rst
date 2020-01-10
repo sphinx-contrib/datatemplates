@@ -19,13 +19,11 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:json::
-      :source: sample.json
+   .. datatemplate:json:: sample.json
       :template: sample.tmpl
 
 Rendered Output
 ===============
 
-.. datatemplate:json::
-   :source: sample.json
+.. datatemplate:json:: sample.json
    :template: sample.tmpl

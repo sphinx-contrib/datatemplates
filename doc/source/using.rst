@@ -5,13 +5,10 @@
 The ``datatemplate`` directive is the interface between the data
 source and the rendering template.
 
-.. rst:directive:: datatemplate:json
+.. rst:directive:: .. datatemplate:json:: source-path
     
-   Load ``source`` via :py:func:`json.load` and render using ``template`` given in directive body.
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory) via
+   :py:func:`json.load` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: template: template name, optional
 
@@ -21,13 +18,10 @@ source and the rendering template.
 
         The text encoding that will be used to read the source file. See :any:`standard-encodings`
 
-.. rst:directive:: datatemplate:yaml
+.. rst:directive:: .. datatemplate:yaml:: source-path
     
-   Load ``source`` via PyYAML_ (``yaml.safe_load``) and render using ``template`` given in directive body.
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory)  via 
+   PyYAML_ (``yaml.safe_load``) and render using ``template`` given in directive body.
 
    .. rst:directive:option:: template: template name, optional
 
@@ -43,38 +37,29 @@ source and the rendering template.
 
 .. _PyYAML: https://pyyaml.org
 
-.. rst:directive:: datatemplate:xml
+.. rst:directive:: .. datatemplate:xml:: source-path
     
-   Load ``source`` via :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``) and render using ``template`` given in directive body.
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory)  via
+   :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``) and render using ``template`` given in directive body.
 
    .. rst:directive:option:: template: template name, optional
 
         The name of a template file on the Sphinx template search path. Overrides directive body.
         
-.. rst:directive:: datatemplate:import-module
+.. rst:directive:: .. datatemplate:import-module:: module-name
     
-   Load ``source`` via :py:func:`importlib.import_module` and render using ``template`` given in directive body.
-
-   .. rst:directive:option:: source: module name, required
-
-        Name of the module to import, must be importable in ``conf.py``
+   Load module ``module-name`` (must be importable in ``conf.py``)  via 
+   :py:func:`importlib.import_module` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: template: template name, optional
 
         The name of a template file on the Sphinx template search path. Overrides directive body.
 
 
-.. rst:directive:: datatemplate:csv
+.. rst:directive:: .. datatemplate:csv:: source-path
     
-   Load ``source`` via :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header`` and render using ``template`` given in directive body.
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file, relative to the documentation build directory.
+   Load file at ``source-path`` (relative to the documentation build directory) via
+   :py:func:`csv.reader` or :py:class:`csv.DictReader` depending on ``header`` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: template: template name, optional
 
@@ -95,13 +80,10 @@ source and the rendering template.
         Set to ``auto``, to try autodetection.
         If not set the default dialect is used.
 
-.. rst:directive:: datatemplate:dbm
+.. rst:directive:: datatemplate:dbm:: source-path
     
-   Load ``source`` via :py:func:`dbm.open` and render using ``template`` given in directive body.
-
-   .. rst:directive:option:: source: source path, required
-
-        The source file (without extension), relative to the documentation build directory.
+   Load DB at ``source-path`` (relative to the documentation build directory)  via
+   :py:func:`dbm.open` and render using ``template`` given in directive body.
 
    .. rst:directive:option:: template: template name, optional
 

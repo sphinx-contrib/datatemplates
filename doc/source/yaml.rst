@@ -22,15 +22,13 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:yaml::
-      :source: sample.yaml
+   .. datatemplate:yaml:: sample.yaml
       :template: sample.tmpl
 
 Rendered Output
 ===============
 
-.. datatemplate:yaml::
-   :source: sample.yaml
+.. datatemplate:yaml:: sample.yaml
    :template: sample.tmpl
 
 
@@ -55,15 +53,13 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:yaml::
-      :source: sample-multiple.yaml
+   .. datatemplate:yaml:: sample-multiple.yaml
       :template: sample-multiple.tmpl
       :multiple-documents:
 
 Rendered Output
 ===============
 
-.. datatemplate:yaml::
-   :source: sample-multiple.yaml
+.. datatemplate:yaml:: sample-multiple.yaml
    :template: sample-multiple.tmpl
    :multiple-documents:

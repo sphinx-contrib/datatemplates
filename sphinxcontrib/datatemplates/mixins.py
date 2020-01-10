@@ -38,7 +38,7 @@ class AbstractDataTemplateBase:
 
 class AbstractDataTemplateWithEncoding(AbstractDataTemplateBase):
     option_spec = dict(AbstractDataTemplateBase.option_spec, **{
-        'encoding': rst.directives.unchanged_required,
+        'encoding': rst.directives.encoding,
     })
 
 

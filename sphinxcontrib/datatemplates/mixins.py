@@ -43,16 +43,16 @@ class AbstractDataTemplateBase:
 
 
 class AbstractDataTemplateWithEncoding(AbstractDataTemplateBase):
-    option_spec = dict(AbstractDataTemplateBase.option_spec, **{
-        'encoding': rst.directives.unchanged,
-    })
+    option_spec = dict(
+        AbstractDataTemplateBase.option_spec, **{
+            'encoding':
+            (lambda s: 'utf-8-sig' if s is None else rst.directives.encoding),
+        })
 
 
 class DataTemplateJSON(AbstractDataTemplateWithEncoding):
     def _load_data(self, resolved_path):
-        with open(resolved_path,
-                  'r',
-                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
+        with open(resolved_path, 'r', encoding=self.options['encoding']) as f:
             return json.load(f)
 
 
@@ -71,7 +71,7 @@ class DataTemplateCSV(AbstractDataTemplateWithEncoding):
         with open(resolved_path,
                   'r',
                   newline='',
-                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
+                  encoding=self.options['encoding']) as f:
             dialect = self.options.get('dialect')
             if dialect == "auto":
                 sample = f.read(8192)
@@ -97,9 +97,7 @@ class DataTemplateYAML(AbstractDataTemplateWithEncoding):
     })
 
     def _load_data(self, resolved_path):
-        with open(resolved_path,
-                  'r',
-                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
+        with open(resolved_path, 'r', encoding=self.options['encoding']) as f:
             if 'multiple-documents' in self.options:
                 return list(
                     yaml.safe_load_all(f)

@@ -56,7 +56,7 @@ def _handle_dialect_option(argument):
 
 class DataTemplateCSV(AbstractDataTemplateWithEncoding):
     option_spec = dict(
-        AbstractDataTemplateBase.option_spec, **{
+        AbstractDataTemplateWithEncoding.option_spec, **{
             'headers': rst.directives.flag,
             'dialect': _handle_dialect_option,
         })
@@ -86,7 +86,7 @@ class DataTemplateCSV(AbstractDataTemplateWithEncoding):
 
 
 class DataTemplateYAML(AbstractDataTemplateWithEncoding):
-    option_spec = dict(AbstractDataTemplateBase.option_spec, **{
+    option_spec = dict(AbstractDataTemplateWithEncoding.option_spec, **{
         'multiple-documents': rst.directives.flag,
     })
 

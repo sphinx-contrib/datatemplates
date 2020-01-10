@@ -1,7 +1,7 @@
 import pbr.version
 from sphinx.util import logging
 
-from . import directive, domain
+from . import domain, legacy
 
 LOG = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ __version__ = pbr.version.VersionInfo(
 
 def setup(app):
     LOG.info('initializing sphinxcontrib.datatemplates')
-    app.add_directive('datatemplate', directive.DataTemplateLegacy)
+    app.add_directive('datatemplate', legacy.DataTemplateLegacy)
     app.add_domain(domain.DataTemplateDomain)
 
     return {

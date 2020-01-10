@@ -1,4 +1,3 @@
-import jinja2
 from . import mixins
 
 

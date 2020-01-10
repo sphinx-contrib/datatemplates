@@ -1,13 +1,3 @@
-import json
-import csv
-import defusedxml.ElementTree as ET
-import yaml
-import dbm
-import contextlib
-import importlib
-import mimetypes
-import codecs
-
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
@@ -15,7 +5,7 @@ from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
 
-from . import helpers, mixins
+from . import mixins
 
 LOG = logging.getLogger(__name__)
 
@@ -48,7 +38,7 @@ class DataTemplateDirective(rst.Directive):
         return templates
 
     def _resolve_source_path(self, env, data_source):
-        rel_filename, filename = env.relfn2path(data_source)
+        _, filename = env.relfn2path(data_source)
         return filename
 
     def run(self):
@@ -104,6 +94,7 @@ class DataTemplateXMLDirective(mixins.DataTemplateXML, DataTemplateDirective):
 
 class DataTemplateDBMDirective(mixins.DataTemplateDBM, DataTemplateDirective):
     pass
+
 
 class DataTemplateImportModuleDirective(mixins.DataTemplateImportModule,
                                         DataTemplateDirective):

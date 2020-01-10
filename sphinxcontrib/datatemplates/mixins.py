@@ -5,15 +5,9 @@ import yaml
 import dbm
 import contextlib
 import importlib
-import mimetypes
-import codecs
 
-from docutils import nodes
 from docutils.parsers import rst
-from docutils.statemachine import ViewList
-from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
-from sphinx.util.nodes import nested_parse_with_titles
 
 from sphinxcontrib.datatemplates import helpers
 

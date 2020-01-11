@@ -4,3 +4,4 @@
 Sphinx
 PyYAML
 defusedxml
+sphinxcontrib-autoprogram

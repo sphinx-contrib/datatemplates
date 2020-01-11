@@ -57,58 +57,59 @@ class DataTemplateJSONStandalone(mixins.DataTemplateJSON,
     @classmethod
     def configure_parser(cls, parser, unrst=True):
         super().configure_parser(parser, unrst)
-        parser.add_argument(
-            "--encoding",
-            help=
-            'The text encoding that will be used to read the source file. Defaults to "utf-8-sig".'
-        )
+        parser.add_argument("--encoding",
+                            help="""
+            The text encoding that will be
+            used to read the source file. Defaults to "utf-8-sig".
+            """)
 
 
 class DataTemplateCSVStandalone(mixins.DataTemplateCSV,
                                 DataTemplateStandalone):
     """
     Load file at :py:attr:`source` via
-    :py:func:`csv.reader` or :py:class:`csv.DictReader` 
+    :py:func:`csv.reader` or :py:class:`csv.DictReader`
     depending on ``header`` and render using :py:attr:`template`.
     """
 
     @classmethod
     def configure_parser(cls, parser, unrst=True):
         super().configure_parser(parser, unrst)
-        parser.add_argument(
-            "--encoding",
-            help=
-            'The text encoding that will be used to read the source file. Defaults to "utf-8-sig".'
-        )
-        parser.add_argument(
-            "--header",
-            action='store_const',
-            const=None,
-            help=
-            "Set to use csv.DictReader for reading the file. If not set csv.reader is used."
-        )
-        parser.add_argument(
-            "--dialect",
-            help=
-            'Set to select a specific csv.Dialect. Set to "auto", to try autodetection. If not set the default dialect is used.'
-        )
+        parser.add_argument("--encoding",
+                            help="""
+            The text encoding that will be
+            used to read the source file. Defaults to "utf-8-sig".
+            """)
+        parser.add_argument("--header",
+                            action='store_const',
+                            const=None,
+                            help="""
+            Set to use csv.DictReader for reading the file.
+            If not set csv.reader is used.
+            """)
+        parser.add_argument("--dialect",
+                            help="""
+            Set to select a specific csv.Dialect.
+            Set to "auto", to try autodetection.
+            If not set the default dialect is used.
+            """)
 
 
 class DataTemplateYAMLStandalone(mixins.DataTemplateYAML,
                                  DataTemplateStandalone):
     """
-    Load file at :py:attr:`source` via 
+    Load file at :py:attr:`source` via
     PyYAML (:py:func:`yaml.safe_load`) and render using :py:attr:`template`.
     """
 
     @classmethod
     def configure_parser(cls, parser, unrst=True):
         super().configure_parser(parser, unrst)
-        parser.add_argument(
-            "--encoding",
-            help=
-            'The text encoding that will be used to read the source file. Defaults to "utf-8-sig".'
-        )
+        parser.add_argument("--encoding",
+                            help="""
+            The text encoding that will be
+            used to read the source file. Defaults to "utf-8-sig".
+            """)
         parser.add_argument(
             "--multiple-documents",
             action='store_const',
@@ -120,7 +121,8 @@ class DataTemplateXMLStandalone(mixins.DataTemplateXML,
                                 DataTemplateStandalone):
     """
     Load file at :py:attr:`source` via
-    :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``) and render using :py:attr:`template`.
+    :py:func:`xml.etree.ElementTree.parse` (actually using ``defusedxml``)
+    and render using :py:attr:`template`.
     """
 
 
@@ -135,7 +137,7 @@ class DataTemplateDBMStandalone(mixins.DataTemplateDBM,
 class DataTemplateImportModuleStandalone(mixins.DataTemplateImportModule,
                                          DataTemplateStandalone):
     """
-    Load module :py:attr:`source` (must be importable)  via 
+    Load module :py:attr:`source` (must be importable)  via
     :py:func:`importlib.import_module` and render using :py:attr:`template`.
     """
 

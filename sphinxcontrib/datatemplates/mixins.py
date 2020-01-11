@@ -86,15 +86,18 @@ class DataTemplateCSV(AbstractDataTemplateWithEncoding):
 
 
 class DataTemplateYAML(AbstractDataTemplateWithEncoding):
-    option_spec = dict(AbstractDataTemplateWithEncoding.option_spec, **{
-        'multiple-documents': rst.directives.flag,
-    })
+    option_spec = dict(
+        AbstractDataTemplateWithEncoding.option_spec, **{
+            'multiple-documents': rst.directives.flag,
+            'multiple_documents': rst.directives.flag,
+        })
 
     def _load_data(self, resolved_path):
         with open(resolved_path,
                   'r',
                   encoding=self.options.get('encoding', 'utf-8-sig')) as f:
-            if 'multiple-documents' in self.options:
+            if ('multiple-documents' in self.options
+                    or 'multiple_documents' in self.options):
                 return list(
                     yaml.safe_load_all(f)
                 )  # force loading all documents now so the file can be closed

@@ -2,6 +2,8 @@ from __future__ import print_function
 from . import mixins
 import argparse
 import re
+import functools
+import textwrap
 
 import jinja2
 
@@ -38,10 +40,11 @@ class DataTemplateStandalone:
 
     @classmethod
     def configure_parser(cls, parser, unrst=True):
+        doc = textwrap.dedent(cls.__doc__)
         if unrst:
-            parser.description = _unrst(cls.__doc__)
+            parser.description = _unrst(doc)
         else:
-            parser.description = cls.__doc__
+            parser.description = doc
         parser.add_argument("source")
         parser.add_argument("template")
         parser.argument_default = argparse.SUPPRESS
@@ -152,26 +155,19 @@ datatemplate_names = {
 }
 
 
-def argument_parser(unrst=True):
-    parser = argparse.ArgumentParser()
-
-    # Add subcommand for each datatemplate
-    subparsers = parser.add_subparsers(title="subcommand", dest="cmd")
-    for name, dt in datatemplate_names.items():
-        p = subparsers.add_parser(name)
-        dt.configure_parser(p, unrst=unrst)
-        p.add_argument('--templates-folder',
-                       help='Path to the templates folder. Defaults to "."',
-                       default='.')
-    return parser
+def argument_parser(datatemplate_name, unrst=True):
+    dt = datatemplate_names[datatemplate_name]
+    p = argparse.ArgumentParser(datatemplate_name)
+    dt.configure_parser(p, unrst=unrst)
+    p.add_argument('--templates-folder',
+                   help='Path to the templates folder. Defaults to "."',
+                   default='.')
+    return p
 
 
-def doc_argument_parser():
-    return argument_parser(unrst=False)
-
-
-def main():
-    parser = argument_parser()
+def main(datatemplate_name):
+    dt = datatemplate_names[datatemplate_name]
+    parser = argument_parser(datatemplate_name)
 
     args = parser.parse_args()
 
@@ -182,10 +178,27 @@ def main():
     options = vars(args)
 
     # do the actual work
-    datatemplate = datatemplate_names[args.cmd](env, args.source,
-                                                args.template, **options)
+    datatemplate = dt(env, args.source, args.template, **options)
     print(datatemplate.run())
 
 
-if __name__ == "__main__":
-    main()
+# console script entry points, script documentation helpers
+main_json = functools.partial(main, "json")
+doc_main_json = functools.partial(argument_parser, "json", unrst=False)
+
+main_csv = functools.partial(main, "csv")
+doc_main_csv = functools.partial(argument_parser, "csv", unrst=False)
+
+main_yaml = functools.partial(main, "yaml")
+doc_main_yaml = functools.partial(argument_parser, "yaml", unrst=False)
+
+main_xml = functools.partial(main, "xml")
+doc_main_xml = functools.partial(argument_parser, "xml", unrst=False)
+
+main_dbm = functools.partial(main, "dbm")
+doc_main_dbm = functools.partial(argument_parser, "dbm", unrst=False)
+
+main_import_module = functools.partial(main, "import-module")
+doc_main_import_module = functools.partial(argument_parser,
+                                           "import-module",
+                                           unrst=False)

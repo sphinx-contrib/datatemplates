@@ -3,5 +3,11 @@ Command Line Usage
 ===================
 
 
-.. autoprogram:: sphinxcontrib.datatemplates.standalone:doc_argument_parser()
-   :prog: standalone.py
+.. datatemplate:import-module:: sphinxcontrib.datatemplates.standalone
+
+    {% for name in data.datatemplate_names %}
+    .. autoprogram:: sphinxcontrib.datatemplates.standalone:doc_main_{{name.replace("-","_")}}()
+        :prog: datatemplate-{{name}}
+
+    {% endfor %}
+

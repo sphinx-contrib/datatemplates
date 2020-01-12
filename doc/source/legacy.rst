@@ -8,7 +8,7 @@ deprecated, and will be removed in the next release.
 Data File
 =========
 
-.. include:: sample.yaml
+.. include:: sample-data/sample.yaml
    :literal:
 
 Template File
@@ -21,5 +21,5 @@ Rendered Output
 ===============
 
 .. datatemplate::
-   :source: sample.yaml
+   :source: sample-data/sample.yaml
    :template: sample.tmpl

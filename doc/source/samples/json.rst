@@ -5,13 +5,13 @@
 Data File
 =========
 
-.. include:: sample.json
+.. include:: ../sample-data/sample.json
    :literal:
 
 Template File
 =============
 
-.. include:: _templates/sample.tmpl
+.. include:: /_templates/sample.tmpl
    :literal:
 
 Loading the Template
@@ -19,11 +19,11 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:json:: sample.json
+   .. datatemplate:json:: ../sample-data/sample.json
       :template: sample.tmpl
 
 Rendered Output
 ===============
 
-.. datatemplate:json:: sample.json
+.. datatemplate:json:: ../sample-data/sample.json
    :template: sample.tmpl

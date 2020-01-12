@@ -5,7 +5,7 @@
 Template File
 =============
 
-.. include:: _templates/import-module-sample.tmpl
+.. include:: /_templates/import-module-sample.tmpl
    :literal:
 
 Loading the Template

@@ -5,7 +5,7 @@
 Data File
 =========
 
-.. include:: sample.json
+.. include:: sample-data/sample.json
    :literal:
 
 Template File
@@ -31,7 +31,7 @@ Loading the Template
 .. code-block:: rst
 
    .. datatemplate:json::
-      :source: sample.json
+      :source: sample-data/sample.json
       
       Individual Item
       ~~~~~~~~~~~~~~~
@@ -49,7 +49,7 @@ Rendered Output
 ===============
 
 .. datatemplate:json::
-   :source: sample.json
+   :source: sample-data/sample.json
    
    Individual Item
    ~~~~~~~~~~~~~~~

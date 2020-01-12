@@ -12,15 +12,11 @@ for Sphinx to render as part of its output.
 
 .. toctree::
    :maxdepth: 2
+   :glob:
 
    using
    cli
-   json
-   yaml  
-   xml
-   import-module
-   csv
-   dbm
+   samples/*
    inline
    legacy
 

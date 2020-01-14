@@ -44,8 +44,8 @@ class DataTemplateBase(rst.Directive):
     optional_arguments = 1
     final_argument_whitespace = True
     option_spec = {
-        'source': rst.directives.unchanged,
-        'template': rst.directives.unchanged,
+        'source': rst.directives.path,
+        'template': rst.directives.path,
     }
     has_content = True
 
@@ -105,7 +105,7 @@ class DataTemplateBase(rst.Directive):
 
 class DataTemplateWithEncoding(DataTemplateBase):
     option_spec = dict(DataTemplateBase.option_spec, **{
-        'encoding': rst.directives.unchanged,
+        'encoding': rst.directives.encoding,
     })
 
 
@@ -193,11 +193,11 @@ def _handle_dialect_option(argument):
 class DataTemplateLegacy(rst.Directive):
 
     option_spec = {
-        'source': rst.directives.unchanged,
-        'template': rst.directives.unchanged,
+        'source': rst.directives.path,
+        'template': rst.directives.path,
         'csvheaders': rst.directives.flag,
         'csvdialect': _handle_dialect_option,
-        'encoding': rst.directives.unchanged,
+        'encoding': rst.directives.encoding,
     }
     has_content = False
 

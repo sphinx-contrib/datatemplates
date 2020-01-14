@@ -59,9 +59,8 @@ def load_xml(source, absolute_resolved_path, **options):
     yield ET.parse(absolute_resolved_path).getroot()
 
 
-@contextlib.contextmanager
 def load_dbm(source, absolute_resolved_path, **options):
-    yield dbm.open(absolute_resolved_path, "r")
+    return dbm.open(absolute_resolved_path, "r")
 
 
 @contextlib.contextmanager

@@ -8,7 +8,9 @@ python:
 jobs:
   include:
     - name: "Docs"
-      script: python setup.py build_sphinx -v -E -W
+      script: 
+        - pip install setup.py
+        - python sphinx-build -E -W -v -T doc/source doc/build
     - name: "Lint"
       install: pip install flake8
       script: flake8 -v sphinxcontrib setup.py

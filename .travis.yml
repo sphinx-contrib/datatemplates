@@ -11,7 +11,7 @@ jobs:
       install:
         - pip install -r requirements.txt
         - python setup.py install
-      script: python sphinx-build -E -W -v -T doc/source doc/build
+      script: python -m sphinx.cmd.build -E -W -v -T doc/source doc/build
     - name: "Lint"
       install: pip install flake8
       script: flake8 -v sphinxcontrib setup.py

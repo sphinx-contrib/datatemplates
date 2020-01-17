@@ -8,8 +8,8 @@ python:
 jobs:
   include:
     - name: "Docs"
-      script: python setup.py build_docs -E -W
+      script: python setup.py build_sphinx -v -E -W
     - name: "Lint"
       install: pip install flake8
-      script: flake8 sphinxcontrib setup.py
+      script: flake8 -v sphinxcontrib setup.py
 

@@ -108,6 +108,11 @@ class DataTemplateBase(rst.Directive):
         nested_parse_with_titles(self.state, result, node)
         return node.children
 
+    @classmethod
+    def usage(cls):
+        _, sep, doc = cls.__doc__.partition(".. rst:directive::")
+        return sep + doc
+
 
 class DataTemplateWithEncoding(DataTemplateBase):
     option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
@@ -117,6 +122,24 @@ class DataTemplateWithEncoding(DataTemplateBase):
 
 
 class DataTemplateJSON(DataTemplateWithEncoding):
+    """
+    .. rst:directive:: .. datatemplate:json:: source-path
+
+        Load file at ``source-path`` (relative to the documentation
+        build directory) via :py:func:`json.load` and render using
+        ``template`` given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+            The name of a template file on the Sphinx template search path.
+            Overrides directive body.
+
+        .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+            The text encoding that will be used to read the source file.
+            See :any:`standard-encodings`
+    """
+
     def _load_data(self, resolved_path):
         with open(resolved_path,
                   'r',
@@ -129,6 +152,36 @@ def _handle_dialect_option(argument):
 
 
 class DataTemplateCSV(DataTemplateWithEncoding):
+    """
+    .. rst:directive:: .. datatemplate:csv:: source-path
+
+        Load file at ``source-path`` (relative to the documentation
+        build directory) via :py:func:`csv.reader` or
+        :py:class:`csv.DictReader` depending on ``header``
+        and render using ``template`` given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+            The name of a template file on the Sphinx template search path.
+            Overrides directive body.
+
+        .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+            The text encoding that will be used to read the source file.
+            See :any:`standard-encodings`
+
+        .. rst:directive:option:: header: flag, optional
+
+                Set to use :py:class:`csv.DictReader` for reading the file.
+                If not set :py:func:`csv.reader` is used.
+
+        .. rst:directive:option:: dialect: optional
+
+                Set to select a specific :py:class:`csv.Dialect`.
+                Set to ``auto``, to try autodetection.
+                If not set the default dialect is used.
+    """
+
     option_spec = defaultdict(
         unchanged_factory, DataTemplateBase.option_spec, **{
             'headers': rst.directives.flag,
@@ -160,6 +213,31 @@ class DataTemplateCSV(DataTemplateWithEncoding):
 
 
 class DataTemplateYAML(DataTemplateWithEncoding):
+    """
+    .. rst:directive:: .. datatemplate:yaml:: source-path
+
+        Load file at ``source-path`` (relative to the documentation build
+        directory)  via PyYAML_ (:py:func:`yaml.safe_load`) and render
+        using ``template`` given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+            The name of a template file on the Sphinx template search path.
+            Overrides directive body.
+
+        .. rst:directive:option:: encoding: optional, defaults to ``utf-8-sig``
+
+            The text encoding that will be used to read the source file.
+            See :any:`standard-encodings`
+
+        .. rst:directive:option:: multiple-documents: flag, optional
+
+                Set to read multiple documents from the file into
+                a :py:class:`list`
+
+    .. _PyYAML: https://pyyaml.org
+    """
+
     option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
                               **{
                                   'multiple-documents': rst.directives.flag,
@@ -177,16 +255,56 @@ class DataTemplateYAML(DataTemplateWithEncoding):
 
 
 class DataTemplateXML(DataTemplateBase):
+    """
+    .. rst:directive:: .. datatemplate:xml:: source-path
+
+        Load file at ``source-path`` (relative to the documentation
+        build directory)  via :py:func:`xml.etree.ElementTree.parse`
+        (actually using ``defusedxml``) and render using ``template``
+        given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+                The name of a template file on the Sphinx template search path.
+                Overrides directive body.
+    """
+
     def _load_data(self, resolved_path):
         return ET.parse(resolved_path).getroot()
 
 
 class DataTemplateDBM(DataTemplateBase):
+    """
+    .. rst:directive:: datatemplate:dbm:: source-path
+
+        Load DB at ``source-path`` (relative to the documentation
+        build directory)  via :py:func:`dbm.open` and render using
+        ``template`` given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+                The name of a template file on the Sphinx template search path.
+                Overrides directive body.
+    """
+
     def _load_data_cm(self, resolved_path):
         return dbm.open(resolved_path, "r")
 
 
 class DataTemplateImportModule(DataTemplateBase):
+    """
+    .. rst:directive:: .. datatemplate:import-module:: module-name
+
+        Load module ``module-name`` (must be importable in ``conf.py``)
+        via :py:func:`importlib.import_module` and render using
+        ``template`` given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+                The name of a template file on the Sphinx template search path.
+                Overrides directive body.
+    """
+
     def _resolve_source_path(self, env, data_source):
         return data_source
 

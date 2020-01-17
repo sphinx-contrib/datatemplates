@@ -7,6 +7,7 @@ import contextlib
 import importlib
 import mimetypes
 import codecs
+from collections import defaultdict
 
 from docutils import nodes
 from docutils.parsers import rst
@@ -39,14 +40,18 @@ def _templates(builder):
     return templates
 
 
+def unchanged_factory():
+    return rst.directives.unchanged
+
+
 class DataTemplateBase(rst.Directive):
 
     optional_arguments = 1
     final_argument_whitespace = True
-    option_spec = {
+    option_spec = defaultdict(unchanged_factory, {
         'source': rst.directives.path,
         'template': rst.directives.path,
-    }
+    })
     has_content = True
 
     def _load_data(self, resolved_path):
@@ -66,6 +71,7 @@ class DataTemplateBase(rst.Directive):
             'make_list_table_from_mappings':
             helpers.make_list_table_from_mappings,
             'data': data,
+            'options': self.options,
         }
 
     def run(self):
@@ -104,9 +110,10 @@ class DataTemplateBase(rst.Directive):
 
 
 class DataTemplateWithEncoding(DataTemplateBase):
-    option_spec = dict(DataTemplateBase.option_spec, **{
-        'encoding': rst.directives.encoding,
-    })
+    option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
+                              **{
+                                  'encoding': rst.directives.encoding,
+                              })
 
 
 class DataTemplateJSON(DataTemplateWithEncoding):
@@ -122,8 +129,8 @@ def _handle_dialect_option(argument):
 
 
 class DataTemplateCSV(DataTemplateWithEncoding):
-    option_spec = dict(
-        DataTemplateBase.option_spec, **{
+    option_spec = defaultdict(
+        unchanged_factory, DataTemplateBase.option_spec, **{
             'headers': rst.directives.flag,
             'dialect': _handle_dialect_option,
         })
@@ -153,9 +160,10 @@ class DataTemplateCSV(DataTemplateWithEncoding):
 
 
 class DataTemplateYAML(DataTemplateWithEncoding):
-    option_spec = dict(DataTemplateBase.option_spec, **{
-        'multiple-documents': rst.directives.flag,
-    })
+    option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
+                              **{
+                                  'multiple-documents': rst.directives.flag,
+                              })
 
     def _load_data(self, resolved_path):
         with open(resolved_path,

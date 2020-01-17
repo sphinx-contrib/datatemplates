@@ -8,10 +8,11 @@ python:
 jobs:
   include:
     - name: "Docs"
-      install:
-        - pip install -r requirements.txt
-        - python setup.py install
-      script: python -m sphinx.cmd.build -E -W -v -T doc/source doc/build
+      install: ~        
+      script:
+        - python setup.py bdist
+        - pip install --find-links dist/ sphinxcontrib.datatemplates
+        - python -m sphinx.cmd.build -E -W -v -T doc/source doc/build
     - name: "Lint"
       install: pip install flake8
       script: flake8 -v sphinxcontrib setup.py

@@ -8,10 +8,8 @@ python:
 jobs:
   include:
     - name: "Docs"
-      env: CMD=python setup.py build_docs -E -W
+      script: CMD=python setup.py build_docs -E -W
     - name: "Lint"
       install: pip install flake8
-      env: CMD=flake8 sphinxcontrib setup.py
+      script: CMD=flake8 sphinxcontrib setup.py
 
-script:
-  - $CMD

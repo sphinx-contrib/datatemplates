@@ -186,10 +186,6 @@ class DataTemplateImportModule(DataTemplateBase):
         return importlib.import_module(resolved_path)
 
 
-def _handle_dialect_option(argument):
-    return rst.directives.choice(argument, ["auto"] + csv.list_dialects())
-
-
 class DataTemplateLegacy(rst.Directive):
 
     option_spec = {

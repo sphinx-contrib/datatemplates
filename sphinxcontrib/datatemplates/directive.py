@@ -2,9 +2,6 @@ import json
 import csv
 import defusedxml.ElementTree as ET
 import yaml
-import dbm
-import contextlib
-import importlib
 import mimetypes
 import codecs
 from collections import defaultdict
@@ -17,6 +14,7 @@ from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
 
 from sphinxcontrib.datatemplates import helpers
+from sphinxcontrib.datatemplates import loaders
 
 LOG = logging.getLogger(__name__)
 _default_templates = None
@@ -40,6 +38,18 @@ def _templates(builder):
     return templates
 
 
+def flag_true(argument):
+    """
+    Check for a valid flag option (no argument) and return ``True``.
+    (Directive option conversion function.)
+    Raise ``ValueError`` if an argument is found.
+    """
+    if argument and argument.strip():
+        raise ValueError('no argument is allowed; "%s" supplied' % argument)
+    else:
+        return True
+
+
 def unchanged_factory():
     return rst.directives.unchanged
 
@@ -54,16 +64,9 @@ class DataTemplateBase(rst.Directive):
     })
     has_content = True
 
-    def _load_data(self, resolved_path):
+    @staticmethod
+    def loader():
         return NotImplemented
-
-    @contextlib.contextmanager
-    def _load_data_cm(self, resolved_path):
-        yield self._load_data(resolved_path)
-
-    def _resolve_source_path(self, env, data_source):
-        rel_filename, filename = env.relfn2path(data_source)
-        return filename
 
     def _make_context(self, data):
         return {
@@ -80,11 +83,11 @@ class DataTemplateBase(rst.Directive):
         builder = app.builder
 
         if 'source' in self.options:
-            data_source = self.options['source']
+            source = self.options['source']
         else:
-            data_source = self.arguments[0]
+            source = self.arguments[0]
 
-        resolved_path = self._resolve_source_path(env, data_source)
+        relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
 
         if 'template' in self.options:
             template = self.options['template']
@@ -93,7 +96,17 @@ class DataTemplateBase(rst.Directive):
             template = '\n'.join(self.content)
             render_function = _templates(builder).render_string
 
-        with self._load_data_cm(resolved_path) as data:
+        loader_options = {
+            "source": source,
+            "relative_resolved_path": relative_resolved_path,
+            "absolute_resolved_path": absolute_resolved_path,
+        }
+        for k, v in self.options.items():
+            k = k.lower().replace(
+                "-", "_")  # make identifier-compatible if trivially possible
+            loader_options.setdefault(k, v)  # do not overwrite
+
+        with self.loader(**loader_options) as data:
             context = self._make_context(data)
             rendered_template = render_function(
                 template,
@@ -102,7 +115,7 @@ class DataTemplateBase(rst.Directive):
 
         result = ViewList()
         for line in rendered_template.splitlines():
-            result.append(line, data_source)
+            result.append(line, source)
         node = nodes.section()
         node.document = self.state.document
         nested_parse_with_titles(self.state, result, node)
@@ -140,11 +153,7 @@ class DataTemplateJSON(DataTemplateWithEncoding):
             See :any:`standard-encodings`
     """
 
-    def _load_data(self, resolved_path):
-        with open(resolved_path,
-                  'r',
-                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
-            return json.load(f)
+    loader = staticmethod(loaders.load_json)
 
 
 def _handle_dialect_option(argument):
@@ -184,32 +193,11 @@ class DataTemplateCSV(DataTemplateWithEncoding):
 
     option_spec = defaultdict(
         unchanged_factory, DataTemplateBase.option_spec, **{
-            'headers': rst.directives.flag,
+            'headers': flag_true,
             'dialect': _handle_dialect_option,
         })
 
-    def _load_data(self, resolved_path):
-        with open(resolved_path,
-                  'r',
-                  newline='',
-                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
-            dialect = self.options.get('dialect')
-            if dialect == "auto":
-                sample = f.read(8192)
-                f.seek(0)
-                sniffer = csv.Sniffer()
-                dialect = sniffer.sniff(sample)
-            if 'headers' in self.options:
-                if dialect is None:
-                    r = csv.DictReader(f)
-                else:
-                    r = csv.DictReader(f, dialect=dialect)
-            else:
-                if dialect is None:
-                    r = csv.reader(f)
-                else:
-                    r = csv.reader(f, dialect=dialect)
-            return list(r)
+    loader = staticmethod(loaders.load_csv)
 
 
 class DataTemplateYAML(DataTemplateWithEncoding):
@@ -240,18 +228,10 @@ class DataTemplateYAML(DataTemplateWithEncoding):
 
     option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
                               **{
-                                  'multiple-documents': rst.directives.flag,
+                                  'multiple-documents': flag_true,
                               })
 
-    def _load_data(self, resolved_path):
-        with open(resolved_path,
-                  'r',
-                  encoding=self.options.get('encoding', 'utf-8-sig')) as f:
-            if 'multiple-documents' in self.options:
-                return list(
-                    yaml.safe_load_all(f)
-                )  # force loading all documents now so the file can be closed
-            return yaml.safe_load(f)
+    loader = staticmethod(loaders.load_yaml)
 
 
 class DataTemplateXML(DataTemplateBase):
@@ -269,8 +249,7 @@ class DataTemplateXML(DataTemplateBase):
             Overrides directive body.
     """
 
-    def _load_data(self, resolved_path):
-        return ET.parse(resolved_path).getroot()
+    loader = staticmethod(loaders.load_xml)
 
 
 class DataTemplateDBM(DataTemplateBase):
@@ -287,8 +266,7 @@ class DataTemplateDBM(DataTemplateBase):
                 Overrides directive body.
     """
 
-    def _load_data_cm(self, resolved_path):
-        return dbm.open(resolved_path, "r")
+    loader = staticmethod(loaders.load_dbm)
 
 
 class DataTemplateImportModule(DataTemplateBase):
@@ -305,11 +283,7 @@ class DataTemplateImportModule(DataTemplateBase):
                 Overrides directive body.
     """
 
-    def _resolve_source_path(self, env, data_source):
-        return data_source
-
-    def _load_data(self, resolved_path):
-        return importlib.import_module(resolved_path)
+    loader = staticmethod(loaders.load_import_module)
 
 
 class DataTemplateLegacy(rst.Directive):

@@ -220,6 +220,8 @@ class DataTemplateYAML(DataTemplateWithEncoding):
         directory)  via PyYAML_ (:py:func:`yaml.safe_load`) and render
         using ``template`` given in directive body.
 
+        .. _PyYAML: https://pyyaml.org
+
         .. rst:directive:option:: template: template name, optional
 
             The name of a template file on the Sphinx template search path.
@@ -232,10 +234,8 @@ class DataTemplateYAML(DataTemplateWithEncoding):
 
         .. rst:directive:option:: multiple-documents: flag, optional
 
-                Set to read multiple documents from the file into
-                a :py:class:`list`
-
-    .. _PyYAML: https://pyyaml.org
+            Set to read multiple documents from the file into
+            a :py:class:`list`
     """
 
     option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
@@ -265,8 +265,8 @@ class DataTemplateXML(DataTemplateBase):
 
         .. rst:directive:option:: template: template name, optional
 
-                The name of a template file on the Sphinx template search path.
-                Overrides directive body.
+            The name of a template file on the Sphinx template search path.
+            Overrides directive body.
     """
 
     def _load_data(self, resolved_path):

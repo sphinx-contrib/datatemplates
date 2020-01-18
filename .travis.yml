@@ -2,6 +2,8 @@ language: python
 
 python:
   - "3.6"
+  - "3.7"
+  - "3.8"
 
 # Add separate test environments for the docs and flake8 linter.
 
@@ -15,4 +17,3 @@ jobs:
     - name: "Lint"
       install: pip install flake8
       script: flake8 -v sphinxcontrib setup.py
-

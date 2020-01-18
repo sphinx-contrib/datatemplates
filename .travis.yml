@@ -3,23 +3,16 @@ language: python
 python:
   - "3.6"
 
-sudo: false
-
 # Add separate test environments for the docs and flake8 linter.
-matrix:
+
+jobs:
   include:
-    - env: BUILD=docs
-    - env: BUILD=linter
+    - name: "Docs"
+      install:
+        - pip install -r requirements.txt
+        - python setup.py install
+      script: python -m sphinx.cmd.build -E -W -v -T doc/source doc/build
+    - name: "Lint"
+      install: pip install flake8
+      script: flake8 -v sphinxcontrib setup.py
 
-# travis pre-installs some packages that may conflict with our test
-# dependencies, so remove them before we set ourselves up. Also
-# install pbr to avoid any setup_requires funkiness with
-# pip/setuptools.
-before_install:
-  - pip uninstall -y nose mock
-  - pip install pbr
-
-install: pip install .[test] .[linter]
-
-script:
-  - ./tools/travis.sh

@@ -15,4 +15,6 @@ jobs:
     - name: "Lint"
       install: pip install flake8
       script: flake8 -v sphinxcontrib setup.py
-
+    - name: "Check Package"
+      install: pip install twine
+      script: ./tools/check_package.sh

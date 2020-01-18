@@ -7,11 +7,13 @@ import codecs
 from collections import defaultdict
 
 from docutils import nodes
-from docutils.parsers import rst
+from docutils.parsers.rst.directives import path, encoding, choice
+
 from docutils.statemachine import ViewList
 from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
+from sphinx.util.docutils import SphinxDirective
 
 from . import helpers
 from . import loaders
@@ -54,13 +56,13 @@ def flag_true(argument):
         return True
 
 
-class DataTemplateBase(rst.Directive):
+class DataTemplateBase(SphinxDirective):
 
     optional_arguments = 1
     final_argument_whitespace = True
     option_spec = defaultdict(unchanged_factory, {
-        'source': rst.directives.path,
-        'template': rst.directives.path,
+        'source': path,
+        'template': path,
     })
     has_content = True
 
@@ -74,7 +76,7 @@ class DataTemplateBase(rst.Directive):
         }
 
     def run(self):
-        env = self.state.document.settings.env
+        env = self.env
         app = env.app
         builder = app.builder
 
@@ -125,7 +127,7 @@ class DataTemplateBase(rst.Directive):
 class DataTemplateWithEncoding(DataTemplateBase):
     option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
                               **{
-                                  'encoding': rst.directives.encoding,
+                                  'encoding': encoding,
                               })
 
 
@@ -152,7 +154,7 @@ class DataTemplateJSON(DataTemplateWithEncoding):
 
 
 def _handle_dialect_option(argument):
-    return rst.directives.choice(argument, ["auto"] + csv.list_dialects())
+    return choice(argument, ["auto"] + csv.list_dialects())
 
 
 class DataTemplateCSV(DataTemplateWithEncoding):
@@ -284,14 +286,14 @@ class DataTemplateImportModule(DataTemplateBase):
     loader = staticmethod(loaders.load_import_module)
 
 
-class DataTemplateLegacy(rst.Directive):
+class DataTemplateLegacy(SphinxDirective):
 
     option_spec = {
-        'source': rst.directives.path,
-        'template': rst.directives.path,
-        'csvheaders': rst.directives.flag,
+        'source': path,
+        'template': path,
+        'csvheaders': flag_true,
         'csvdialect': _handle_dialect_option,
-        'encoding': rst.directives.encoding,
+        'encoding': encoding,
     }
     has_content = False
 

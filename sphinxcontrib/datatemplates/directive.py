@@ -50,8 +50,21 @@ def flag_true(argument):
         return True
 
 
+def flag_or_strip(argument):
+    """
+    Check for a valid flag option (no argument) and return ``True``,
+    else return argument stripped.
+    (Directive option conversion function.)
+    """
+    if argument:
+        stripped = argument.strip()
+        if stripped:
+            return stripped
+    return True
+
+
 def unchanged_factory():
-    return rst.directives.unchanged
+    return flag_or_strip
 
 
 class DataTemplateBase(rst.Directive):

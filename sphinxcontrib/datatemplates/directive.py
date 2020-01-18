@@ -7,7 +7,9 @@ import codecs
 from collections import defaultdict
 
 from docutils import nodes
-from docutils.parsers.rst.directives import path, encoding, choice
+from docutils.parsers.rst.directives import (
+    path, encoding, choice, unchanged, flag,
+)
 
 from docutils.statemachine import ViewList
 from sphinx.jinja2glue import BuiltinTemplateLoader
@@ -41,7 +43,8 @@ def _templates(builder):
 
 
 def unchanged_factory():
-    return rst.directives.unchanged
+    return unchanged
+
 
 def flag_true(argument):
     """
@@ -192,7 +195,7 @@ class DataTemplateCSV(DataTemplateWithEncoding):
 
     option_spec = defaultdict(
         unchanged_factory, DataTemplateBase.option_spec, **{
-            'headers': rst.directives.flag,
+            'headers': flag,
             'dialect': _handle_dialect_option,
         })
 
@@ -227,7 +230,7 @@ class DataTemplateYAML(DataTemplateWithEncoding):
 
     option_spec = defaultdict(unchanged_factory, DataTemplateBase.option_spec,
                               **{
-                                  'multiple-documents': rst.directives.flag,
+                                  'multiple-documents': flag,
                               })
 
     loader = staticmethod(loaders.load_yaml)

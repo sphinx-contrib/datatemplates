@@ -89,6 +89,8 @@ class DataTemplateBase(rst.Directive):
 
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
 
+        env.note_dependency(absolute_resolved_path)
+
         if 'template' in self.options:
             template = self.options['template']
             render_function = _templates(builder).render

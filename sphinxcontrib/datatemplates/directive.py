@@ -73,6 +73,8 @@ class DataTemplateBase(rst.Directive):
             'make_list_table': helpers.make_list_table,
             'make_list_table_from_mappings':
             helpers.make_list_table_from_mappings,
+            'escape_rst': helpers.escape_rst,
+            'escape_rst_url': helpers.escape_rst_url,
             'data': data,
             'options': self.options,
         }

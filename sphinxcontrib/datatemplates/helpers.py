@@ -34,8 +34,25 @@ def make_list_table_from_mappings(headers, data, title, columns=None):
     """
     header_names = [h[0] for h in headers]
     header_keys = [h[1] for h in headers]
-    row_data = (
-        [d.get(k) for k in header_keys]
-        for d in data
-    )
+    row_data = ([d.get(k) for k in header_keys] for d in data)
     return make_list_table(header_names, row_data, title, columns)
+
+
+def escape_rst(s):
+    """Escape string for inclusion in RST documents.
+
+    See https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
+
+    :param s: String for escaping
+    """
+    return "".join(c if c.isspace() else "\\" + c for c in s)
+
+
+def escape_rst_url(s):
+    """Escape string for inclusion in URLs in RST documents.
+
+    See https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
+
+    :param s: String for escaping
+    """
+    return "\\".join(s)

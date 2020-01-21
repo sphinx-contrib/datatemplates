@@ -24,6 +24,11 @@ def main():
         'template',
         help='the path to the template file',
     )
+    parser.add_argument(
+        '--option',
+        action='append',
+        help='options given as key:value passed through to loader and template'
+    )
     # TODO: add subparsers with args from __kwdefaults__
     args = parser.parse_args()
 
@@ -33,7 +38,10 @@ def main():
             config_body = f.read()
         exec(config_body, config_globals)
     config_globals.update(
-        **{
+        {
+            k.replace("-", "_"): v
+            for k, _, v in (s.partition(':') for s in args.option)
+        }, **{
             "source": args.source,
             "template": args.template,
             "absolute_resolved_path": os.path.abspath(args.source)
@@ -54,3 +62,7 @@ def main():
             **config_globals,
         )
     print(rendered)
+
+
+if __name__ == '__main__':
+    main()

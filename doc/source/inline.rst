@@ -17,6 +17,7 @@ HTML Context
 
 .. code-block:: python
 
+   # from conf.py
    html_context = {
        'sample': 'Sample context value set in conf.py',
    }
@@ -41,7 +42,7 @@ Template File
       HTML Context
       ~~~~~~~~~~~~
 
-      {% for key, value in html_context.items() %}
+      {% for key, value in config.html_context.items() %}
       - ``{{key}}`` = ``{{value}}``
       {% endfor %}
 
@@ -68,7 +69,7 @@ Loading the Template
       HTML Context
       ~~~~~~~~~~~~
 
-      {% for key, value in html_context.items() %}
+      {% for key, value in config.html_context.items() %}
       - ``{{key}}`` = ``{{value}}``
       {% endfor %}
 
@@ -93,6 +94,6 @@ Rendered Output
    HTML Context
    ~~~~~~~~~~~~
 
-   {% for key, value in html_context.items() %}
+   {% for key, value in config.html_context.items() %}
    - ``{{key}}`` = ``{{value}}``
    {% endfor %}

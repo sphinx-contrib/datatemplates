@@ -68,13 +68,13 @@ class DataTemplateBase(rst.Directive):
     def loader():
         return NotImplemented
 
-    def _make_context(self, data, html_context):
+    def _make_context(self, data, config):
         return {
             'make_list_table': helpers.make_list_table,
             'make_list_table_from_mappings':
             helpers.make_list_table_from_mappings,
             'data': data,
-            'html_context': html_context,
+            'config': config,
             'options': self.options,
         }
 
@@ -107,13 +107,8 @@ class DataTemplateBase(rst.Directive):
                 "-", "_")  # make identifier-compatible if trivially possible
             loader_options.setdefault(k, v)  # do not overwrite
 
-        if 'html_context' in app.config:
-            html_context = app.config.html_context
-        else:
-            html_context = {}
-
         with self.loader(**loader_options) as data:
-            context = self._make_context(data, html_context)
+            context = self._make_context(data, app.config)
             rendered_template = render_function(
                 template,
                 context,

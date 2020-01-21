@@ -8,6 +8,11 @@ import csv
 
 
 @contextlib.contextmanager
+def load_nothing(source, **options):
+    yield None
+
+
+@contextlib.contextmanager
 def load_csv(source,
              absolute_resolved_path,
              headers=False,

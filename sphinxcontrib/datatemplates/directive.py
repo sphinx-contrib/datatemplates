@@ -50,8 +50,27 @@ def flag_true(argument):
         return True
 
 
+def unknown_option(argument):
+    """
+    Check for a valid flag option (no argument) and return ``True``,
+    else return argument stripped.
+    (Directive option conversion function.)
+
+    For unknown options we cannot know if they should be
+    passed to the loader as flags or strings.
+    We could pass ``None`` if the option string contains nothing
+    except whitespace but this would not be intuitive for
+    keyword argument flags as ``bool(None) is False``.
+    """
+    if argument:
+        stripped = argument.strip()
+        if stripped:
+            return stripped
+    return True
+
+
 def unchanged_factory():
-    return rst.directives.unchanged
+    return unknown_option
 
 
 class DataTemplateBase(rst.Directive):

@@ -56,10 +56,10 @@ def unknown_option(argument):
     else return argument stripped.
     (Directive option conversion function.)
 
-    For unknown options we cannot know if they should be 
-    passed to the loader as flags or strings. 
-    We could pass ``None`` if the option string contains nothing 
-    except whitespace but this would not be intuitive for 
+    For unknown options we cannot know if they should be
+    passed to the loader as flags or strings.
+    We could pass ``None`` if the option string contains nothing
+    except whitespace but this would not be intuitive for
     keyword argument flags as ``bool(None) is False``.
     """
     if argument:

@@ -41,7 +41,8 @@ def make_list_table_from_mappings(headers, data, title, columns=None):
 def escape_rst(s):
     """Escape string for inclusion in RST documents.
 
-    See https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
+    See
+    https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
 
     :param s: String for escaping
     """
@@ -51,7 +52,8 @@ def escape_rst(s):
 def escape_rst_url(s):
     """Escape string for inclusion in URLs in RST documents.
 
-    See https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
+    See
+    https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
 
     :param s: String for escaping
     """

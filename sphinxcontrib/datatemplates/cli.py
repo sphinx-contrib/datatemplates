@@ -17,19 +17,20 @@ def main():
         help='the path to conf.py',
     )
     parser.add_argument(
-        'source',
-        help='the path to the data file',
+        '--option',
+        '-o',
+        action='append',
+        help='options given as key:value passed through to loader and template'
     )
     parser.add_argument(
         'template',
         help='the path to the template file',
     )
     parser.add_argument(
-        '--option',
-        action='append',
-        help='options given as key:value passed through to loader and template'
+        'source',
+        help='the path to the data file',
     )
-    # TODO: add subparsers with args from __kwdefaults__
+
     args = parser.parse_args()
 
     config_globals = {}

@@ -24,9 +24,9 @@ Command Line
 
 .. code-block:: bat
 
-   python -m sphinxcontrib.datatemplates.cli doc/source/sample-multiple.yaml doc/source/_templates/sample-multiple.tmpl --option multiple-documents:1
+   python -m sphinxcontrib.datatemplates.cli -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
 
 Output
 ======
 
-.. runcmd:: python -m sphinxcontrib.datatemplates.cli doc/source/sample-multiple.yaml doc/source/_templates/sample-multiple.tmpl --option multiple-documents:1
+.. runcmd:: python -m sphinxcontrib.datatemplates.cli -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml

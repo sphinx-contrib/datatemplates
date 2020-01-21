@@ -12,10 +12,6 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
-import shlex
-
 import pkg_resources
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -35,6 +31,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.autodoc',
     'sphinxcontrib.datatemplates',
+    "sphinxcontrib.runcmd",
 ]
 
 # Support linking to Python Docs
@@ -115,7 +112,6 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
-
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -236,8 +232,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'sphinxcontribdatatemplates.tex',
-     u'sphinxcontrib.datatemplates Documentation',
-     u'Doug Hellmann', 'manual'),
+     u'sphinxcontrib.datatemplates Documentation', u'Doug Hellmann', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -260,20 +255,15 @@ latex_documents = [
 # If false, no module index is generated.
 # latex_domain_indices = True
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'sphinxcontribdatatemplates',
-     u'sphinxcontrib.datatemplates Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, 'sphinxcontribdatatemplates',
+              u'sphinxcontrib.datatemplates Documentation', [author], 1)]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -282,8 +272,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'sphinxcontribdatatemplates',
-     u'sphinxcontrib.datatemplates Documentation',
-     author, 'sphinxcontribdatatemplates', 'One line description of project.',
+     u'sphinxcontrib.datatemplates Documentation', author,
+     'sphinxcontribdatatemplates', 'One line description of project.',
      'Miscellaneous'),
 ]
 

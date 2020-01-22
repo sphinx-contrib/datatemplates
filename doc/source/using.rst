@@ -17,12 +17,14 @@ Directives
       {% endfor %}
         
 
+.. _template_context:
+
 Template Context
 ================
 
-When a ``datatemplate`` directive is processed, the data is passed to
-the template through its context so that the symbol ``data`` is
-available as a global variable.
+When a ``datatemplate`` directive is processed, the data from the
+``source`` is passed to the template through its context so that the
+symbol ``data`` is available as a global variable.
 
 .. important::
     The data is loaded from the source and passed directly to the
@@ -30,8 +32,13 @@ available as a global variable.
     to handle aspects like ``None`` values and fields that have values
     that may interfere with parsing reStructuredText.
 
+The `application configuration`_ for a project will be passed to the
+template as the symbol ``config``. This can be used, for example, to
+access `HTML context`_ via ``config.html_context``. Refer to the
+:doc:`inline` for an example.
 
-
+.. _HTML context: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-html_context
+.. _application configuration: https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 Template Helpers
 ================

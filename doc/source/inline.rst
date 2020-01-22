@@ -2,11 +2,25 @@
  Inline Sample (JSON)
 ======================
 
+This example demonstrates how to use an inline template, as well as
+accessing the :ref:`HTML context <template_context>` available to all
+``datatemplate`` directives.
+
 Data File
 =========
 
 .. include:: sample.json
    :literal:
+
+HTML Context
+============
+
+.. code-block:: python
+
+   # from conf.py
+   html_context = {
+       'sample': 'Sample context value set in conf.py',
+   }
 
 Template File
 =============
@@ -23,6 +37,13 @@ Template File
 
       {% for item in data['key2'] %}
       - {{item}}
+      {% endfor %}
+
+      HTML Context
+      ~~~~~~~~~~~~
+
+      {% for key, value in config.html_context.items() %}
+      - ``{{key}}`` = ``{{value}}``
       {% endfor %}
 
 Loading the Template
@@ -45,6 +66,13 @@ Loading the Template
       - {{item}}
       {% endfor %}
 
+      HTML Context
+      ~~~~~~~~~~~~
+
+      {% for key, value in config.html_context.items() %}
+      - ``{{key}}`` = ``{{value}}``
+      {% endfor %}
+
 Rendered Output
 ===============
 
@@ -61,4 +89,11 @@ Rendered Output
 
    {% for item in data['key2'] %}
    - {{item}}
+   {% endfor %}
+
+   HTML Context
+   ~~~~~~~~~~~~
+
+   {% for key, value in config.html_context.items() %}
+   - ``{{key}}`` = ``{{value}}``
    {% endfor %}

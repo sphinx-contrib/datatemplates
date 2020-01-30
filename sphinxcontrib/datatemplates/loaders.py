@@ -5,7 +5,6 @@ import defusedxml.ElementTree as ET
 import dbm
 import importlib
 import csv
-import re
 import mimetypes
 
 registered_loaders = []
@@ -15,10 +14,7 @@ class LoaderEntry:
     def __init__(self, loader, name, match_source):
         self.loader = loader
         self.name = name
-        if isinstance(match_source, str):
-            self.match_source = re.compile(match_source).match
-        else:
-            self.match_source = match_source
+        self.match_source = match_source
 
 
 def loader_for_source(source, default=None):
@@ -35,6 +31,16 @@ def loader_by_name(name, default=None):
     return default
 
 
+def append_loader(name, match_source=None):
+    def wrap(loader_func):
+        registered_loaders.append(LoaderEntry(loader_func, name, match_source))
+        return loader_func
+
+    return wrap
+
+
+@append_loader("csv",
+               (lambda source: mimetypes.guess_type(source)[0] == "test/csv"))
 @contextlib.contextmanager
 def load_csv(source,
              absolute_resolved_path,
@@ -61,18 +67,18 @@ def load_csv(source,
         yield list(r)
 
 
-registered_loaders.append(LoaderEntry(load_csv, "csv", ".*?[.]csv$"))
-
-
+@append_loader(
+    "json",
+    (lambda source: mimetypes.guess_type(source)[0] == "application/json"))
 @contextlib.contextmanager
 def load_json(source, absolute_resolved_path, encoding='utf-8-sig', **options):
     with open(absolute_resolved_path, 'r', encoding=encoding) as f:
         yield json.load(f)
 
 
-registered_loaders.append(LoaderEntry(load_json, "json", ".*?[.]json$"))
-
-
+@append_loader("yaml",
+               (lambda source: source.lower().endswith(".yml") or source.lower(
+               ).endswith(".yaml")))
 @contextlib.contextmanager
 def load_yaml(source,
               absolute_resolved_path,
@@ -88,30 +94,19 @@ def load_yaml(source,
             yield yaml.safe_load(f)
 
 
-registered_loaders.append(LoaderEntry(load_yaml, "yaml", ".*?[.]yaml$"))
-
-
+@append_loader("xml",
+               (lambda source: "xml" in mimetypes.guess_type(source)[0]))
 @contextlib.contextmanager
 def load_xml(source, absolute_resolved_path, **options):
     yield ET.parse(absolute_resolved_path).getroot()
 
 
-registered_loaders.append(
-    LoaderEntry(load_xml, "xml",
-                (lambda source: "xml" in mimetypes.guess_type(source)[0])))
-
-
+@append_loader("dbm")
 def load_dbm(source, absolute_resolved_path, **options):
     return dbm.open(absolute_resolved_path, "r")
 
 
-registered_loaders.append(LoaderEntry(load_dbm, "dbm", None))
-
-
+@append_loader("import-module")
 @contextlib.contextmanager
 def load_import_module(source, **options):
     yield importlib.import_module(source)
-
-
-registered_loaders.append(
-    LoaderEntry(load_import_module, "import-module", None))

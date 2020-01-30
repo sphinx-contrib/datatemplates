@@ -138,12 +138,12 @@ class DataTemplateWithEncoding(DataTemplateBase):
                               })
 
 
-class DataTemplateNothing(DataTemplateBase):
+class DataTemplateNoData(DataTemplateBase):
     """
-    .. rst:directive:: .. datatemplate:nothing:: source-path
+    .. rst:directive:: .. datatemplate:nodata::
 
-        Ignore ``source-path`` and render using ``template``
-        given in directive body.
+        Load ``None`` as ``data`` and render
+        using ``template`` given in directive body.
 
         .. rst:directive:option:: template: template name, optional
 
@@ -151,7 +151,7 @@ class DataTemplateNothing(DataTemplateBase):
             Overrides directive body.
     """
 
-    loader = staticmethod(loaders.load_nothing)
+    loader = staticmethod(loaders.load_nodata)
 
 
 class DataTemplateJSON(DataTemplateWithEncoding):

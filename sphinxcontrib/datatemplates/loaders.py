@@ -8,7 +8,7 @@ import csv
 
 
 @contextlib.contextmanager
-def load_nothing(source, **options):
+def load_nodata(source, **options):
     yield None
 
 

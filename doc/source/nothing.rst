@@ -8,7 +8,7 @@ Loading the Template
 
 .. code-block:: rst
 
-   .. datatemplate:nothing::
+   .. datatemplate:nodata::
             
       - {{ data['key1'] }}
       - {{ data }}
@@ -18,7 +18,7 @@ Loading the Template
 Rendered Output
 ===============
 
-.. datatemplate:nothing::   
+.. datatemplate:nodata::   
    
    - {{ data['key1'] }}
    - {{ data }}

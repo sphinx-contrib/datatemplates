@@ -38,15 +38,20 @@ def main():
         with io.open(args.config_file, 'r', encoding='utf-8-sig') as f:
             config_body = f.read()
         exec(config_body, config_globals)
-    config_globals.update(
-        {
-            k.replace("-", "_"): v
-            for k, _, v in (s.partition(':') for s in args.option)
-        }, **{
-            "source": args.source,
-            "template": args.template,
-            "absolute_resolved_path": os.path.abspath(args.source)
-        })
+    # add options
+    config_globals.update({
+        k.replace("-", "_"): v
+        for k, _, v in (s.partition(':') for s in args.option)
+    })
+    # add special options
+    config_globals.update({
+        "source":
+        args.source,
+        "template":
+        args.template,
+        "absolute_resolved_path":
+        os.path.abspath(args.source)
+    })
 
     load = loaders.loader_for_source(args.source)
 

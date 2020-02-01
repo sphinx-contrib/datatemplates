@@ -14,7 +14,7 @@ for Sphinx to render as part of its output.
    :maxdepth: 2
 
    using
-   nothing
+   nodata
    json
    yaml  
    xml

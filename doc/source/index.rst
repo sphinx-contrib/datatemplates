@@ -22,6 +22,7 @@ for Sphinx to render as part of its output.
    dbm
    inline
    legacy
+   cli
 
 Indices and tables
 ==================

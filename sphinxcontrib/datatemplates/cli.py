@@ -2,24 +2,12 @@ from __future__ import print_function
 
 import argparse
 import io
-import json
+import os.path
 
 import jinja2
-import yaml
 
 from sphinxcontrib.datatemplates import helpers
-
-
-def _load_data(filename):
-    if filename.endswith('.yaml'):
-        with open(filename, 'r') as f:
-            return yaml.load(f)
-    elif filename.endswith('.json'):
-        with open(filename, 'r') as f:
-            return json.load(f)
-    else:
-        raise NotImplementedError('cannot load file type of %s' %
-                                  filename)
+from sphinxcontrib.datatemplates import loaders
 
 
 def main():
@@ -29,31 +17,58 @@ def main():
         help='the path to conf.py',
     )
     parser.add_argument(
-        'source',
-        help='the path to the data file',
+        '--option',
+        '-o',
+        action='append',
+        help='options given as key:value passed through to loader and template'
     )
     parser.add_argument(
         'template',
         help='the path to the template file',
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        'source',
+        help='the path to the data file',
+    )
 
-    data = _load_data(args.source)
+    args = parser.parse_args()
 
     config_globals = {}
     if args.config_file:
-        with io.open(args.config_file, 'r', encoding='utf-8') as f:
+        with io.open(args.config_file, 'r', encoding='utf-8-sig') as f:
             config_body = f.read()
         exec(config_body, config_globals)
+    # add options
+    config_globals.update({
+        k.replace("-", "_"): v
+        for k, _, v in (s.partition(':') for s in args.option)
+    })
+    # add special options
+    config_globals.update({
+        "source":
+        args.source,
+        "template":
+        args.template,
+        "absolute_resolved_path":
+        os.path.abspath(args.source)
+    })
 
-    with io.open(args.template, 'r', encoding='utf-8') as f:
+    load = loaders.loader_for_source(args.source)
+
+    with io.open(args.template, 'r', encoding='utf-8-sig') as f:
         template_body = f.read()
 
     template = jinja2.Template(template_body)
-    rendered = template.render(
-        make_list_table=helpers.make_list_table,
-        make_list_table_from_mappings=helpers.make_list_table_from_mappings,
-        data=data,
-        **config_globals,
-    )
+    with load(**config_globals) as data:
+        rendered = template.render(
+            make_list_table=helpers.make_list_table,
+            make_list_table_from_mappings=helpers.
+            make_list_table_from_mappings,
+            data=data,
+            **config_globals,
+        )
     print(rendered)
+
+
+if __name__ == '__main__':
+    main()

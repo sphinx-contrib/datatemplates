@@ -24,9 +24,9 @@ Command Line
 
 .. code-block:: bat
 
-   datatemplate -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+   datatemplate -o multiple-documents  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
 
 Output
 ======
 
-.. runcmd:: datatemplate -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+.. runcmd:: datatemplate -o multiple-documents  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml

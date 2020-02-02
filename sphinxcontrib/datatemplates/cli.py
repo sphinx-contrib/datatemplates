@@ -38,11 +38,16 @@ def main():
         with io.open(args.config_file, 'r', encoding='utf-8-sig') as f:
             config_body = f.read()
         exec(config_body, config_globals)
-    # add options
-    config_globals.update({
-        k.replace("-", "_"): v
-        for k, _, v in (s.partition(':') for s in args.option)
-    })
+    # Add options. If there is a colon, use it to separate the option
+    # name from its value. If there is no colon, treat the option as a
+    # flag.
+    for opt in args.option:
+        if ':' in opt:
+            k, _, v = opt.partition(':')
+        else:
+            k = opt
+            v = True
+        config_globals[k.replace('-', '_')] = v
     # add special options
     config_globals.update({
         "source":

@@ -1,11 +1,12 @@
 import contextlib
-import json
-import yaml
-import defusedxml.ElementTree as ET
-import dbm
-import importlib
 import csv
+import dbm
+import defusedxml.ElementTree as ET
+import importlib
+import json
 import mimetypes
+import pathlib
+import yaml
 
 registered_loaders = []
 
@@ -18,6 +19,7 @@ class LoaderEntry:
 
 
 def loader_for_source(source, default=None):
+    "Return the loader for the named source."
     for e in registered_loaders:
         if e.match_source(source):
             return e.loader
@@ -25,13 +27,48 @@ def loader_for_source(source, default=None):
 
 
 def loader_by_name(name, default=None):
+    "Return the loader registered with the given name."
     for e in registered_loaders:
         if e.name == name:
             return e.loader
     return default
 
 
+def mimetype_loader(name, mimetype):
+    "A data loader for the exact mimetype."
+    def check_mimetype(source):
+        guess = mimetypes.guess_type(source)[0]
+        if not guess:
+            return False
+        return guess == mimetype
+    return append_loader(name, check_mimetype)
+
+
+def lenient_mimetype_loader(name, mimetype_fragment):
+    "A data loader for a mimetype containing the given substring."
+    def check_mimetype(source):
+        guess = mimetypes.guess_type(source)[0]
+        if not guess:
+            return False
+        return mimetype_fragment in guess
+    return append_loader(name, check_mimetype)
+
+
+def file_extension_loader(name, extensions):
+    "A data loader for filenames ending with one of the given extensions."
+    def check_ext(filename):
+        return pathlib.Path(filename).suffix.lower() in set(
+            e.lower() for e in extensions)
+    return append_loader(name, check_ext)
+
+
 def append_loader(name, match_source=None):
+    """Add a named loader
+
+    Add a named data loader with an optional function for matching to
+    source names.
+
+    """
     def wrap(loader_func):
         registered_loaders.append(LoaderEntry(loader_func, name, match_source))
         return loader_func
@@ -39,13 +76,12 @@ def append_loader(name, match_source=None):
     return wrap
 
 
-@append_loader("csv",
-               (lambda source: mimetypes.guess_type(source)[0] == "test/csv"))
 @contextlib.contextmanager
 def load_nodata(source, **options):
     yield None
 
 
+@file_extension_loader("csv", [".csv"])
 @contextlib.contextmanager
 def load_csv(source,
              absolute_resolved_path,
@@ -72,18 +108,14 @@ def load_csv(source,
         yield list(r)
 
 
-@append_loader(
-    "json",
-    (lambda source: mimetypes.guess_type(source)[0] == "application/json"))
+@mimetype_loader("json", "application/json")
 @contextlib.contextmanager
 def load_json(source, absolute_resolved_path, encoding='utf-8-sig', **options):
     with open(absolute_resolved_path, 'r', encoding=encoding) as f:
         yield json.load(f)
 
 
-@append_loader("yaml",
-               (lambda source: source.lower().endswith(".yml") or source.lower(
-               ).endswith(".yaml")))
+@file_extension_loader("yaml", ['.yml', '.yaml'])
 @contextlib.contextmanager
 def load_yaml(source,
               absolute_resolved_path,
@@ -99,14 +131,13 @@ def load_yaml(source,
             yield yaml.safe_load(f)
 
 
-@append_loader("xml",
-               (lambda source: "xml" in mimetypes.guess_type(source)[0]))
+@lenient_mimetype_loader('xml', 'xml')
 @contextlib.contextmanager
 def load_xml(source, absolute_resolved_path, **options):
     yield ET.parse(absolute_resolved_path).getroot()
 
 
-@append_loader("dbm")
+@file_extension_loader("dbm", ['.dbm'])
 def load_dbm(source, absolute_resolved_path, **options):
     return dbm.open(absolute_resolved_path, "r")
 

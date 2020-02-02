@@ -42,6 +42,11 @@ def append_loader(name, match_source=None):
 @append_loader("csv",
                (lambda source: mimetypes.guess_type(source)[0] == "test/csv"))
 @contextlib.contextmanager
+def load_nodata(source, **options):
+    yield None
+
+
+@contextlib.contextmanager
 def load_csv(source,
              absolute_resolved_path,
              headers=False,

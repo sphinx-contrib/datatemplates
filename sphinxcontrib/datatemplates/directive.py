@@ -106,8 +106,10 @@ class DataTemplateBase(rst.Directive):
 
         if 'source' in self.options:
             source = self.options['source']
-        else:
+        elif self.arguments:
             source = self.arguments[0]
+        else:
+            source = ""
 
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
 
@@ -156,6 +158,22 @@ class DataTemplateWithEncoding(DataTemplateBase):
                               **{
                                   'encoding': rst.directives.encoding,
                               })
+
+
+class DataTemplateNoData(DataTemplateBase):
+    """
+    .. rst:directive:: .. datatemplate:nodata::
+
+        Load ``None`` as ``data`` and render
+        using ``template`` given in directive body.
+
+        .. rst:directive:option:: template: template name, optional
+
+            The name of a template file on the Sphinx template search path.
+            Overrides directive body.
+    """
+
+    loader = staticmethod(loaders.load_nodata)
 
 
 class DataTemplateJSON(DataTemplateWithEncoding):

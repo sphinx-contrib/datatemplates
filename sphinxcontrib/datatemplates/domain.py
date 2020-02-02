@@ -7,6 +7,7 @@ class DataTemplateDomain(Domain):
     name = 'datatemplate'
     label = 'DataTemplate Replacement'
     directives = {
+        'nodata': directive.DataTemplateNoData,
         'json': directive.DataTemplateJSON,
         'yaml': directive.DataTemplateYAML,
         'csv': directive.DataTemplateCSV,

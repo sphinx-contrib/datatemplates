@@ -14,13 +14,14 @@ for Sphinx to render as part of its output.
    :maxdepth: 2
 
    using
+   nodata
    json
    yaml  
    xml
    import-module
    csv
    dbm
-   inline
+   inline   
    legacy
    cli
 

@@ -1,6 +1,6 @@
-======================
- No External Data Sample
-======================
+================
+ No Data Sample
+================
 
 
 Loading the Template

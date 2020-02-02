@@ -5,7 +5,7 @@
 Help
 ====
 
-.. runcmd:: python -m sphinxcontrib.datatemplates.cli --help
+.. runcmd:: datatemplate --help
 
 Data File
 =========
@@ -24,9 +24,9 @@ Command Line
 
 .. code-block:: bat
 
-   python -m sphinxcontrib.datatemplates.cli -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+   datatemplate -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
 
 Output
 ======
 
-.. runcmd:: python -m sphinxcontrib.datatemplates.cli -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+.. runcmd:: datatemplate -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml

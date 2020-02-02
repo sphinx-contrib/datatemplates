@@ -21,7 +21,7 @@ class LoaderEntry:
 def loader_for_source(source, default=None):
     "Return the loader for the named source."
     for e in registered_loaders:
-        if e.match_source(source):
+        if e.match_source is not None and e.match_source(source):
             return e.loader
     return default
 
@@ -29,7 +29,7 @@ def loader_for_source(source, default=None):
 def loader_by_name(name, default=None):
     "Return the loader registered with the given name."
     for e in registered_loaders:
-        if e.name == name:
+        if e.match_source is not None and e.name == name:
             return e.loader
     return default
 
@@ -76,6 +76,7 @@ def data_source_loader(name, match_source=None):
     return wrap
 
 
+@data_source_loader("nodata")
 @contextlib.contextmanager
 def load_nodata(source, **options):
     yield None

@@ -41,7 +41,7 @@ def mimetype_loader(name, mimetype):
         if not guess:
             return False
         return guess == mimetype
-    return append_loader(name, check_mimetype)
+    return data_source_loader(name, check_mimetype)
 
 
 def lenient_mimetype_loader(name, mimetype_fragment):
@@ -51,7 +51,7 @@ def lenient_mimetype_loader(name, mimetype_fragment):
         if not guess:
             return False
         return mimetype_fragment in guess
-    return append_loader(name, check_mimetype)
+    return data_source_loader(name, check_mimetype)
 
 
 def file_extension_loader(name, extensions):
@@ -59,10 +59,10 @@ def file_extension_loader(name, extensions):
     def check_ext(filename):
         return pathlib.Path(filename).suffix.lower() in set(
             e.lower() for e in extensions)
-    return append_loader(name, check_ext)
+    return data_source_loader(name, check_ext)
 
 
-def append_loader(name, match_source=None):
+def data_source_loader(name, match_source=None):
     """Add a named loader
 
     Add a named data loader with an optional function for matching to
@@ -142,7 +142,7 @@ def load_dbm(source, absolute_resolved_path, **options):
     return dbm.open(absolute_resolved_path, "r")
 
 
-@append_loader("import-module")
+@data_source_loader("import-module")
 @contextlib.contextmanager
 def load_import_module(source, **options):
     yield importlib.import_module(source)

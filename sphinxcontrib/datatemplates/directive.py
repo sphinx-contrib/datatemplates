@@ -74,7 +74,7 @@ def unchanged_factory():
 
 
 class DataTemplateBase(rst.Directive):
-
+    filesystem_path = True
     optional_arguments = 1
     final_argument_whitespace = True
     option_spec = defaultdict(unchanged_factory, {
@@ -111,9 +111,13 @@ class DataTemplateBase(rst.Directive):
         else:
             source = ""
 
-        relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
+        loader_options = {"source": source}
 
-        env.note_dependency(absolute_resolved_path)
+        if self.filesystem_path:
+            relative_resolved_path, absolute_resolved_path = env.relfn2path(
+                source)
+            env.note_dependency(absolute_resolved_path)
+            loader_options["source"] = absolute_resolved_path
 
         if 'template' in self.options:
             template = self.options['template']
@@ -122,11 +126,6 @@ class DataTemplateBase(rst.Directive):
             template = '\n'.join(self.content)
             render_function = _templates(builder).render_string
 
-        loader_options = {
-            "source": source,
-            "relative_resolved_path": relative_resolved_path,
-            "absolute_resolved_path": absolute_resolved_path,
-        }
         for k, v in self.options.items():
             k = k.lower().replace(
                 "-", "_")  # make identifier-compatible if trivially possible
@@ -172,8 +171,8 @@ class DataTemplateNoData(DataTemplateBase):
             The name of a template file on the Sphinx template search path.
             Overrides directive body.
     """
-
-    loader = staticmethod(loaders.load_nodata)
+    filesystem_path = False
+    loader = staticmethod(loaders.loader_by_name("nodata"))
 
 
 class DataTemplateJSON(DataTemplateWithEncoding):
@@ -195,7 +194,7 @@ class DataTemplateJSON(DataTemplateWithEncoding):
             See :any:`standard-encodings`
     """
 
-    loader = staticmethod(loaders.load_json)
+    loader = staticmethod(loaders.loader_by_name("json"))
 
 
 def _handle_dialect_option(argument):
@@ -239,7 +238,7 @@ class DataTemplateCSV(DataTemplateWithEncoding):
             'dialect': _handle_dialect_option,
         })
 
-    loader = staticmethod(loaders.load_csv)
+    loader = staticmethod(loaders.loader_by_name("csv"))
 
 
 class DataTemplateYAML(DataTemplateWithEncoding):
@@ -273,7 +272,7 @@ class DataTemplateYAML(DataTemplateWithEncoding):
                                   'multiple-documents': flag_true,
                               })
 
-    loader = staticmethod(loaders.load_yaml)
+    loader = staticmethod(loaders.loader_by_name("yaml"))
 
 
 class DataTemplateXML(DataTemplateBase):
@@ -291,7 +290,7 @@ class DataTemplateXML(DataTemplateBase):
             Overrides directive body.
     """
 
-    loader = staticmethod(loaders.load_xml)
+    loader = staticmethod(loaders.loader_by_name("xml"))
 
 
 class DataTemplateDBM(DataTemplateBase):
@@ -308,7 +307,7 @@ class DataTemplateDBM(DataTemplateBase):
                 Overrides directive body.
     """
 
-    loader = staticmethod(loaders.load_dbm)
+    loader = staticmethod(loaders.loader_by_name("dbm"))
 
 
 class DataTemplateImportModule(DataTemplateBase):
@@ -324,8 +323,8 @@ class DataTemplateImportModule(DataTemplateBase):
                 The name of a template file on the Sphinx template search path.
                 Overrides directive body.
     """
-
-    loader = staticmethod(loaders.load_import_module)
+    filesystem_path = False
+    loader = staticmethod(loaders.loader_by_name("import-module"))
 
 
 class DataTemplateLegacy(rst.Directive):

@@ -2,7 +2,6 @@ from __future__ import print_function
 
 import argparse
 import io
-import os.path
 
 import jinja2
 
@@ -45,12 +44,8 @@ def main():
     })
     # add special options
     config_globals.update({
-        "source":
-        args.source,
-        "template":
-        args.template,
-        "absolute_resolved_path":
-        os.path.abspath(args.source)
+        "source": args.source,
+        "template": args.template,
     })
 
     load = loaders.loader_for_source(args.source)

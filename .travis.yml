@@ -25,3 +25,13 @@ jobs:
       script:
         - python setup.py sdist
         - twine check dist/*.tar.gz
+
+deploy:
+  on:
+    tags: true
+  distributions: "sdist bdist_wheel"
+  skip_existing: true
+  provider: pypi
+  user: __token__
+  password:
+    secure: "P5w8QosGsYVjmy2zbqHzFGDQMBs+RA14odCIyiUy+jyR3Y5d4ManYdpXijLtnaL4DPH3JFhBheJ3pdRe+xQNKTSZkngmf3vg5Mt69nB56uww69x47TGman2WLajU2/WspFHhfs8k7TrceoJgsDvHlSzN5Yop4XxlAJ1m5+3ooNc5E+hmrqS1v8ec92w6jHMlmsG0+AOLWyr1hFnHZ71ccrnNdCmnMxYmNekKYnJ3EAHMpVbEu2y5Zq5exPEJTEMqqrOKP2rquPnDDvpA+Ssscjue6YD5SUTaFTk6OMBz+V7UWBOBPCrou65NiekQgZW4+gTxlv+TrYVdrWfK2Mzp8yBQfyYNcUIuQOa0NOnVBGse1yEkqHCCDrAxv/58noUKFVmLsIMOHEyFgDFd1vG26835nNJS0JbYa8JUz59CIGPH7yq6eDB2ZZO6Wn+LmvQ3+r8FbiC6Astph5601oHkXSz7XxiNNOZcu3mDrBZLlUW8nB29jLuIc73kZkpF1HPnuI3lQaS+c1cRx8CHUxvWF+O2qdtGVIL8Kc7N+fX6NRvXjpmQpYeZ+40E8a2KjtdcMtyTM8q9CCVs8HsBR2eMsVFfPEMLRjCEnxnaTe+kkcN0HRSI9ScTf3Ad7Tk9R4bKfjNw5oLYdH7V1NysYSe6LTiopRPzOX1JJ4GTS3KlG58="

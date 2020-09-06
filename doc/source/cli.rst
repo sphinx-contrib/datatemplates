@@ -19,14 +19,16 @@ Template File
 .. include:: _templates/sample-multiple.tmpl
    :literal:
 
-Command Line
-============
+Rendering a Template
+====================
 
-.. code-block:: bat
+.. code-block:: console
 
-   datatemplate -o multiple-documents  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+   $ datatemplate render -o multiple-documents \
+     doc/source/_templates/sample-multiple.tmpl \
+     doc/source/sample-multiple.yaml
 
 Output
-======
+------
 
-.. runcmd:: datatemplate -o multiple-documents  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+.. runcmd:: datatemplate render -o multiple-documents  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml

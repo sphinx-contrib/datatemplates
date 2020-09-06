@@ -74,7 +74,7 @@ def main():
             make_list_table_from_mappings=helpers.
             make_list_table_from_mappings,
             data=data,
-            **config_globals,
+            **config_globals
         )
     print(rendered)
 

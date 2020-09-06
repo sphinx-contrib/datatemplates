@@ -16,14 +16,15 @@ for Sphinx to render as part of its output.
    using
    nodata
    json
-   yaml  
+   yaml
    xml
    import-module
    csv
    dbm
-   inline   
+   inline
    legacy
    cli
+   history
 
 Indices and tables
 ==================

@@ -20,6 +20,7 @@ def main():
         '--option',
         '-o',
         action='append',
+        default=[],
         help='options given as key:value passed through to loader and template'
     )
     parser.add_argument(

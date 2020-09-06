@@ -60,6 +60,9 @@ def main():
     })
 
     load = loaders.loader_for_source(args.source)
+    if load is None:
+        print('Could not find loader for {}'.format(args.source))
+        return 1
 
     with io.open(args.template, 'r', encoding='utf-8-sig') as f:
         template_body = f.read()

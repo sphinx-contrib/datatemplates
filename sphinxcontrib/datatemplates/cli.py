@@ -3,6 +3,7 @@ from __future__ import print_function
 import argparse
 import io
 import os.path
+import pprint
 
 import jinja2
 
@@ -42,6 +43,23 @@ def main():
         help='the path to the data file',
     )
     do_render.set_defaults(func=render)
+
+    do_dump = subparsers.add_parser(
+        'dump',
+        help='dump the data to stdout without a template',
+    )
+    do_dump.add_argument(
+        '--option',
+        '-o',
+        action='append',
+        default=[],
+        help='options given as key:value passed through to loader and template'
+    )
+    do_dump.add_argument(
+        'source',
+        help='the path to the data file',
+    )
+    do_dump.set_defaults(func=dump)
 
     args = parser.parse_args()
     # no arguments, print help messaging, then exit with error(1)
@@ -99,6 +117,22 @@ def render(args, conf):
             **conf
         )
     print(rendered)
+
+
+def dump(args, conf):
+    conf.update(_parse_options(args.option))
+    conf.update({
+        "source": args.source,
+        "absolute_resolved_path": os.path.abspath(args.source)
+    })
+
+    load = loaders.loader_for_source(args.source)
+    if load is None:
+        print('Could not find loader for {}'.format(args.source))
+        return 1
+
+    with load(**conf) as data:
+        pprint.pprint(data)
 
 
 if __name__ == '__main__':

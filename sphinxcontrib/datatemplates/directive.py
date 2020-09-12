@@ -87,7 +87,7 @@ class DataTemplateBase(rst.Directive):
     def loader():
         return NotImplemented
 
-    def _make_context(self, data, config):
+    def _make_context(self, data, config, env):
         return {
             'make_list_table': helpers.make_list_table,
             'make_list_table_from_mappings':
@@ -97,6 +97,7 @@ class DataTemplateBase(rst.Directive):
             'data': data,
             'config': config,
             'options': self.options,
+            'env': env,
         }
 
     def run(self):
@@ -133,7 +134,7 @@ class DataTemplateBase(rst.Directive):
             loader_options.setdefault(k, v)  # do not overwrite
 
         with self.loader(**loader_options) as data:
-            context = self._make_context(data, app.config)
+            context = self._make_context(data, app.config, env)
             rendered_template = render_function(
                 template,
                 context,

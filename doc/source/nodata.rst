@@ -9,18 +9,29 @@ Loading the Template
 .. code-block:: rst
 
    .. datatemplate:nodata::
-            
-      - {{ data['key1'] }}
+
+      Inline data:
+
       - {{ data }}
 
-      
+      Document titles from the Sphinx environment:
+
+      {% for doc, title in env.titles.items() %}
+      - ``{{ title }} ({{ doc }})``
+      {% endfor %}
+
 
 Rendered Output
 ===============
 
-.. datatemplate:nodata::   
-   
-   - {{ data['key1'] }}
+.. datatemplate:nodata::
+
+    Inline data:
+
    - {{ data }}
 
-   
+   Document titles from the Sphinx environment:
+
+   {% for doc, title in env.titles.items() %}
+   - ``{{ title }} ({{ doc }})``
+   {% endfor %}

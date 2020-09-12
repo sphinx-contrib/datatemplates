@@ -10,12 +10,12 @@ Directives
 
 .. datatemplate:import-module::
       :source: sphinxcontrib.datatemplates.domain
-      
+
       {% for key,directive in data.DataTemplateDomain.directives.items()|sort() %}
       {{directive.usage()}}
 
       {% endfor %}
-        
+
 
 .. _template_context:
 

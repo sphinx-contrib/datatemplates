@@ -24,6 +24,7 @@ for Sphinx to render as part of its output.
    inline
    legacy
    cli
+   history
 
 Indices and tables
 ==================

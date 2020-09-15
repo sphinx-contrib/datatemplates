@@ -10,12 +10,12 @@ Directives
 
 .. datatemplate:import-module::
       :source: sphinxcontrib.datatemplates.domain
-      
+
       {% for key,directive in data.DataTemplateDomain.directives.items()|sort() %}
       {{directive.usage()}}
 
       {% endfor %}
-        
+
 
 .. _template_context:
 
@@ -37,8 +37,14 @@ template as the symbol ``config``. This can be used, for example, to
 access `HTML context`_ via ``config.html_context``. Refer to the
 :doc:`inline` for an example.
 
+The `Sphinx build environment`_ for a project will be passed to the
+template as the symbol ``env``. This can be used to access all of the
+information that Sphinx has about the current build, including
+settings, and document names. Refer to the :doc:`nodata` for an example.
+
 .. _HTML context: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-html_context
 .. _application configuration: https://www.sphinx-doc.org/en/master/usage/configuration.html
+.. _Sphinx build environment: https://www.sphinx-doc.org/en/master/extdev/envapi.html#sphinx.environment.BuildEnvironment
 
 Template Helpers
 ================

@@ -26,7 +26,7 @@ Template File
 =============
 
 .. code-block:: jinja
-   
+
       Individual Item
       ~~~~~~~~~~~~~~~
 
@@ -53,7 +53,7 @@ Loading the Template
 
    .. datatemplate:json::
       :source: sample.json
-      
+
       Individual Item
       ~~~~~~~~~~~~~~~
 
@@ -78,10 +78,10 @@ Rendered Output
 
 .. datatemplate:json::
    :source: sample.json
-   
+
    Individual Item
    ~~~~~~~~~~~~~~~
-   
+
    {{ data['key1'] }}
 
    List of Items

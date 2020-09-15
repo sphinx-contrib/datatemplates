@@ -5,7 +5,7 @@
 Help
 ====
 
-.. runcmd:: python -m sphinxcontrib.datatemplates.cli --help
+.. runcmd:: datatemplate --help
 
 Data File
 =========
@@ -19,14 +19,37 @@ Template File
 .. include:: _templates/sample-multiple.tmpl
    :literal:
 
-Command Line
-============
+Rendering a Template
+====================
 
-.. code-block:: bat
+.. code-block:: console
 
-   python -m sphinxcontrib.datatemplates.cli -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+   $ datatemplate render -o multiple-documents \
+     doc/source/_templates/sample-multiple.tmpl \
+     doc/source/sample-multiple.yaml
 
-Output
-======
+.. runcmd:: datatemplate render -o multiple-documents  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
 
-.. runcmd:: python -m sphinxcontrib.datatemplates.cli -o multiple-documents:1  doc/source/_templates/sample-multiple.tmpl doc/source/sample-multiple.yaml
+Experimenting by Dumping Data
+=============================
+
+CSV Data With Headers
+---------------------
+
+.. code-block:: console
+
+   $ datatemplate dump -o dialect:excel-tab \
+     -o headers \
+     doc/source/sample.csv
+
+.. runcmd:: datatemplate dump -o dialect:excel-tab -o headers doc/source/sample.csv
+
+CSV Data Without Headers
+------------------------
+
+.. code-block:: console
+
+   $ datatemplate dump -o dialect:excel-tab \
+     doc/source/sample.csv
+
+.. runcmd:: datatemplate dump -o dialect:excel-tab doc/source/sample.csv

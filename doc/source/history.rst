@@ -2,8 +2,8 @@
  Release History
 =================
 
-next
-====
+0.7.0
+=====
 
 * add sphinx builder environment to template context
 * cli: add a 'dump' subcommand

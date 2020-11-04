@@ -1,0 +1,31 @@
+name: Check
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tox-environment:
+          - docs
+          - linter
+          - pkglint
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: python -m pip install tox
+
+      - name: Run
+        run: tox -e ${{ matrix.tox-environment }}

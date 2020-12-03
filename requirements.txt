@@ -5,4 +5,4 @@ pbr # not just for setup
 Sphinx
 PyYAML
 defusedxml
-sphinxcontrib.runcmd
+sphinxcontrib-runcmd

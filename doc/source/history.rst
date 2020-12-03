@@ -2,6 +2,12 @@
  Release History
 =================
 
+0.7.2
+=====
+
+* update requirement for sphinxcontrib.runcmd to use the canonical
+  form of the package name (contributions by Matthew Thode)
+
 0.7.0
 =====
 

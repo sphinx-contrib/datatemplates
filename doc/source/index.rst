@@ -13,6 +13,7 @@ for Sphinx to render as part of its output.
 .. toctree::
    :maxdepth: 2
 
+   install
    using
    nodata
    json

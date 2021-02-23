@@ -16,6 +16,13 @@ Directives
 
       {% endfor %}
 
+Template Files
+==============
+
+The ``datatemplate`` directive uses Sphinx's `templates_path`_
+configuration setting to search for template files.
+
+.. _templates_path: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-templates_path
 
 .. _template_context:
 

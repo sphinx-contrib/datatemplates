@@ -1,10 +1,10 @@
-======================
- Inline Sample (JSON)
-======================
+===============
+ Inline Sample
+===============
 
 This example demonstrates how to use an inline template, as well as
 accessing the :ref:`HTML context <template_context>` available to all
-``datatemplate`` directives.
+``datatemplate`` directives, regardless of the data format.
 
 Data File
 =========
@@ -22,8 +22,8 @@ HTML Context
        'sample': 'Sample context value set in conf.py',
    }
 
-Loading the Template
-====================
+An Inline Template
+==================
 
 .. code-block:: rst
 

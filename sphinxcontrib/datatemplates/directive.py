@@ -1,20 +1,18 @@
-import json
-import csv
-import defusedxml.ElementTree as ET
-import yaml
-import mimetypes
 import codecs
+import csv
+import json
+import mimetypes
 from collections import defaultdict
 
+import defusedxml.ElementTree as ET
+import yaml
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
 from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
-
-from sphinxcontrib.datatemplates import helpers
-from sphinxcontrib.datatemplates import loaders
+from sphinxcontrib.datatemplates import helpers, loaders
 
 LOG = logging.getLogger(__name__)
 _default_templates = None

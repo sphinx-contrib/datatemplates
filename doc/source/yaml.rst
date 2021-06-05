@@ -32,8 +32,8 @@ Rendered Output
    :template: sample.tmpl
 
 
-Multiple Documents
-++++++++++++++++++
+Multiple Documents in One Source
+++++++++++++++++++++++++++++++++
 
 
 Data File

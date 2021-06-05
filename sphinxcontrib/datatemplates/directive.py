@@ -96,7 +96,35 @@ class DataTemplateBase(rst.Directive):
             'config': config,
             'options': self.options,
             'env': env,
+            'load': self._dynamic_load,
         }
+
+    def _dynamic_load(self, source, **input_loader_options):
+        # FIXME: This does not work for dbm or other databases because
+        # the handle is closed.
+        env = self.state.document.settings.env
+        relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
+        env.note_dependency(absolute_resolved_path)
+
+        loader = loaders.loader_for_source(source, default=self.loader)
+
+        loader_options = {
+            "source": source,
+            "relative_resolved_path": relative_resolved_path,
+            "absolute_resolved_path": absolute_resolved_path,
+        }
+
+        if loader == self.loader:
+            for k, v in self.options.items():
+                # make identifier-compatible if trivially possible
+                k = k.lower().replace(
+                    "-", "_")
+                loader_options.setdefault(k, v)  # do not overwrite
+
+        loader_options.update(input_loader_options)
+
+        with loader(**loader_options) as data:
+            return data
 
     def run(self):
         env = self.state.document.settings.env

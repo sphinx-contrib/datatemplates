@@ -99,14 +99,20 @@ class DataTemplateBase(rst.Directive):
             'load': self._dynamic_load,
         }
 
-    def _dynamic_load(self, source, **input_loader_options):
+    def _dynamic_load(self, source, data_format=None, **input_loader_options):
         # FIXME: This does not work for dbm or other databases because
         # the handle is closed.
         env = self.state.document.settings.env
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
         env.note_dependency(absolute_resolved_path)
 
-        loader = loaders.loader_for_source(source, default=self.loader)
+        if data_format is not None:
+            loader = loaders.loader_by_name(data_format)
+            if loader is None:
+                raise ValueError('Could not find loader named {!r}'.format(
+                    data_format))
+        else:
+            loader = loaders.loader_for_source(source, default=self.loader)
 
         loader_options = {
             "source": source,

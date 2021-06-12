@@ -2,8 +2,8 @@
  Release History
 =================
 
-Next
-====
+0.8.0
+=====
 
 * Add `load()` function to template context for loading data sources
   from within a template, to allow combining data from multiple

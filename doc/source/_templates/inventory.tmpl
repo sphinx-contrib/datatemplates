@@ -1,0 +1,17 @@
+.. -*- mode: rst -*-
+
+{# The details about parts in inventory are kept in a separate data
+   file from the stock quantity. #}
+{% set parts = load('part-details.yaml') %}
+
+.. list-table:: What's in stock
+   :header-rows: 1
+
+   * - part-num
+     - quantity
+     - description
+   {% for item in data | sort %}
+   * - {{ item[0] }}
+     - {{ item[1] }}
+     - {{ parts[item[0]].description }}
+   {% endfor %}

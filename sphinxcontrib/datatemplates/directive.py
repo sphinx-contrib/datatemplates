@@ -1,20 +1,18 @@
-import json
-import csv
-import defusedxml.ElementTree as ET
-import yaml
-import mimetypes
 import codecs
+import csv
+import json
+import mimetypes
 from collections import defaultdict
 
+import defusedxml.ElementTree as ET
+import yaml
 from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
 from sphinx.jinja2glue import BuiltinTemplateLoader
 from sphinx.util import logging
 from sphinx.util.nodes import nested_parse_with_titles
-
-from sphinxcontrib.datatemplates import helpers
-from sphinxcontrib.datatemplates import loaders
+from sphinxcontrib.datatemplates import helpers, loaders
 
 LOG = logging.getLogger(__name__)
 _default_templates = None
@@ -98,7 +96,41 @@ class DataTemplateBase(rst.Directive):
             'config': config,
             'options': self.options,
             'env': env,
+            'load': self._dynamic_load,
         }
+
+    def _dynamic_load(self, source, data_format=None, **input_loader_options):
+        # FIXME: This does not work for dbm or other databases because
+        # the handle is closed.
+        env = self.state.document.settings.env
+        relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
+        env.note_dependency(absolute_resolved_path)
+
+        if data_format is not None:
+            loader = loaders.loader_by_name(data_format)
+            if loader is None:
+                raise ValueError('Could not find loader named {!r}'.format(
+                    data_format))
+        else:
+            loader = loaders.loader_for_source(source, default=self.loader)
+
+        loader_options = {
+            "source": source,
+            "relative_resolved_path": relative_resolved_path,
+            "absolute_resolved_path": absolute_resolved_path,
+        }
+
+        if loader == self.loader:
+            for k, v in self.options.items():
+                # make identifier-compatible if trivially possible
+                k = k.lower().replace(
+                    "-", "_")
+                loader_options.setdefault(k, v)  # do not overwrite
+
+        loader_options.update(input_loader_options)
+
+        with loader(**loader_options) as data:
+            return data
 
     def run(self):
         env = self.state.document.settings.env

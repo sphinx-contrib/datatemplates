@@ -23,6 +23,7 @@ for Sphinx to render as part of its output.
    csv
    dbm
    inline
+   multiple-sources
    legacy
    cli
    history

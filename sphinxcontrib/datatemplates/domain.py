@@ -20,11 +20,11 @@ class DataTemplateDomain(Domain):
         return []
 
     def resolve_xref(self, env, fromdocname, builder, typ, target, node,
-                    contnode):
+                     contnode):
         return None
-    
+
     def resolve_any_xref(self, env, fromdocname, builder, target, node,
-                    contnode):
+                         contnode):
         return []
 
     def merge_domaindata(self, docnames, otherdata):

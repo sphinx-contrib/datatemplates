@@ -23,5 +23,9 @@ class DataTemplateDomain(Domain):
                      contnode):
         return None
 
+    def resolve_any_xref(self, env, fromdocname, builder, target, node,
+                         contnode):
+        return []
+
     def merge_domaindata(self, docnames, otherdata):
         pass

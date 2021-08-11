@@ -137,16 +137,19 @@ class DataTemplateBase(rst.Directive):
         app = env.app
         builder = app.builder
 
+        has_source = True
         if 'source' in self.options:
             source = self.options['source']
         elif self.arguments:
             source = self.arguments[0]
         else:
+            has_source = False
             source = ""
 
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
 
-        env.note_dependency(absolute_resolved_path)
+        if has_source:
+            env.note_dependency(absolute_resolved_path)
 
         if 'template' in self.options:
             template = self.options['template']

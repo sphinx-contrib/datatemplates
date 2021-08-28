@@ -137,18 +137,20 @@ class DataTemplateBase(rst.Directive):
         app = env.app
         builder = app.builder
 
-        has_source = True
         if 'source' in self.options:
             source = self.options['source']
         elif self.arguments:
             source = self.arguments[0]
         else:
-            has_source = False
             source = ""
 
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
 
-        if has_source:
+        # Only add a dependency if we were given an explicit
+        # source. Otherwise, we end up adding a directory as a
+        # dependency, which is illegal. See
+        # https://github.com/sphinx-contrib/datatemplates/pull/83
+        if source:
             env.note_dependency(absolute_resolved_path)
 
         if 'template' in self.options:

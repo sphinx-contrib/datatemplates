@@ -2,6 +2,15 @@
  Release History
 =================
 
+0.8.1
+=====
+
+* Fix dependency management in the directive so that directives with
+  no source specified do not introduce a build dependency on a path
+  that resolves to a directory. See `PR 83
+  <https://github.com/sphinx-contrib/datatemplates/pull/83>`__ for
+  details. (contributions by Øyvind Harboe)
+
 0.8.0
 =====
 

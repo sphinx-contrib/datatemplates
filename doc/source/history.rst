@@ -2,7 +2,7 @@
  Release History
 =================
 
-0.8.1
+0.9.1
 =====
 
 * Fix dependency management in the directive so that directives with
@@ -10,6 +10,14 @@
   that resolves to a directory. See `PR 83
   <https://github.com/sphinx-contrib/datatemplates/pull/83>`__ for
   details. (contributions by Øyvind Harboe)
+
+0.9.0
+=====
+
+* Fix directive cross-reference management so it works in markdown
+  files. See `PR 82
+  <https://github.com/sphinx-contrib/datatemplates/pull/82>`__ for
+  details. (contributions by Manuel Racle)
 
 0.8.0
 =====

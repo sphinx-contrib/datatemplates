@@ -104,7 +104,12 @@ class DataTemplateBase(rst.Directive):
         # the handle is closed.
         env = self.state.document.settings.env
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
-        env.note_dependency(absolute_resolved_path)
+        # Only add a dependency if we were given an explicit
+        # source. Otherwise, we end up adding a directory as a
+        # dependency, which is illegal. See
+        # https://github.com/sphinx-contrib/datatemplates/pull/83
+        if source:
+            env.note_dependency(absolute_resolved_path)
 
         if data_format is not None:
             loader = loaders.loader_by_name(data_format)

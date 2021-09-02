@@ -177,10 +177,17 @@ class DataTemplateBase(rst.Directive):
 
         with self.loader(**loader_options) as data:
             context = self._make_context(data, app.config, env)
-            rendered_template = render_function(
-                template,
-                context,
-            )
+            from jinja2 import StrictUndefined
+            old = env.app.builder.templates.environment.undefined
+            try:
+                env.app.builder.templates.environment.undefined = StrictUndefined
+
+                rendered_template = render_function(
+                    template,
+                    context,
+                )
+            finally:
+                env.app.builder.templates.environment.undefined = old
 
         result = ViewList()
         for line in rendered_template.splitlines():

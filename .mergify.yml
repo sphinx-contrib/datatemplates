@@ -1,0 +1,42 @@
+pull_request_rules:
+
+  - name: Add CI label
+    conditions:
+      - or:
+          - "title~=^tox:"
+          - "title~=^ci:"
+          - "files~=tox.ini"
+    actions:
+      label:
+        add:
+          - ci
+
+  - name: Add Mergify label
+    conditions:
+      - or:
+          - "title~=^mergify:"
+          - "files~=.mergify.yml$"
+    actions:
+      label:
+        add:
+          - mergify
+
+  - name: Automatic merge on approval
+    conditions:
+      - and:
+        - "check-success=build (docs)"
+        - "check-success=build (linter)"
+        - "check-success=build (pkglint)"
+        - "check-success=build (3.6)"
+        - "check-success=build (3.7)"
+        - "check-success=build (3.8)"
+        - "check-success=build (3.9)"
+        - "-draft"
+        - or:
+          - "approved-reviews-by=dhellmann"
+          - "author=dhellmann"
+          - "approved-reviews-by=janbrohl"
+          - "author=janbrohl"
+    actions:
+      merge:
+        method: merge

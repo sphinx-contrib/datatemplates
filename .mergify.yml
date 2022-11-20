@@ -27,10 +27,10 @@ pull_request_rules:
         - "check-success=build (docs)"
         - "check-success=build (linter)"
         - "check-success=build (pkglint)"
-        - "check-success=build (3.6)"
-        - "check-success=build (3.7)"
         - "check-success=build (3.8)"
         - "check-success=build (3.9)"
+        - "check-success=build (3.10)"
+        - "check-success=build (3.11)"
         - "-draft"
         - or:
           - "approved-reviews-by=dhellmann"

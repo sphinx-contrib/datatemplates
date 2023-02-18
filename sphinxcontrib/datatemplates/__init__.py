@@ -1,12 +1,9 @@
-import pbr.version
 from sphinx.util import logging
 
-from . import directive, domain
+from . import directive, domain, version
 
+__version__ = version.__version__
 LOG = logging.getLogger(__name__)
-
-__version__ = pbr.version.VersionInfo(
-    "sphinxcontrib.datatemplates").version_string()
 
 
 def setup(app):
@@ -15,7 +12,7 @@ def setup(app):
     app.add_domain(domain.DataTemplateDomain)
 
     return {
-        'version': __version__,
+        'version': version.__version__,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
     }

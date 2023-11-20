@@ -50,6 +50,7 @@ linter = [
 ]
 test = [
     "pytest",
+    "beautifulsoup4",
 ]
 
 [tools.setuptools]

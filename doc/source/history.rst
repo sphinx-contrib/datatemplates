@@ -2,6 +2,11 @@
  Release History
 =================
 
+unreleased
+==========
+
+* Add python 3.12 to the test matrix and support list.
+
 0.9.1
 =====
 

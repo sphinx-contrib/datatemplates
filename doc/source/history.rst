@@ -2,10 +2,14 @@
  Release History
 =================
 
-unreleased
-==========
+0.10.0
+======
 
 * Add python 3.12 to the test matrix and support list.
+* Add support for `custom template bridges
+  <https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-template_bridge>`_. See
+  `PR 92 <https://github.com/sphinx-contrib/datatemplates/pull/92>`__
+  for details. (contribution by Ilya Boyazitov).
 
 0.9.1
 =====

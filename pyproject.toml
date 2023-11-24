@@ -53,6 +53,10 @@ test = [
     "pytest",
     "beautifulsoup4",
 ]
+build = [
+    "build",
+    "twine",
+]
 
 [tools.setuptools]
 packages = [

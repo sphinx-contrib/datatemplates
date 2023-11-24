@@ -10,7 +10,7 @@ from docutils import nodes
 from docutils.parsers import rst
 from docutils.statemachine import ViewList
 from sphinx.jinja2glue import BuiltinTemplateLoader
-from sphinx.util import logging
+from sphinx.util import logging, import_object
 from sphinx.util.nodes import nested_parse_with_titles
 from sphinxcontrib.datatemplates import helpers, loaders
 
@@ -28,7 +28,13 @@ def _templates(builder):
     if not templates:
         if not _default_templates:
             # Initialize default templates manager once
-            _default_templates = BuiltinTemplateLoader()
+            if builder.config.template_bridge:
+                _default_templates = import_object(
+                    objname=builder.config.template_bridge,
+                    source="template_bridge setting",
+                )()
+            else:
+                _default_templates = BuiltinTemplateLoader()
             _default_templates.init(builder)
 
         templates = _default_templates

@@ -1,0 +1,1 @@
+.. datatemplate:json:: sample.json

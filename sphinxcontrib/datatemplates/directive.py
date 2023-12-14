@@ -5,6 +5,7 @@ import mimetypes
 from collections import defaultdict
 
 import defusedxml.ElementTree as ET
+import jinja2
 import yaml
 from docutils import nodes
 from docutils.parsers import rst
@@ -152,8 +153,14 @@ class DataTemplateBase(rst.Directive):
             source = self.options['source']
         elif self.arguments:
             source = self.arguments[0]
-        else:
+        elif self.loader in {loaders.load_import_module, loaders.load_nodata}:
             source = ""
+        else:
+            error = self.state_machine.reporter.error(
+                'Source file is required',
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
 
         relative_resolved_path, absolute_resolved_path = env.relfn2path(source)
 
@@ -171,6 +178,13 @@ class DataTemplateBase(rst.Directive):
             template = '\n'.join(self.content)
             render_function = _templates(builder).render_string
 
+        if not template:
+            error = self.state_machine.reporter.error(
+                "Template is empty",
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
+
         loader_options = {
             "source": source,
             "relative_resolved_path": relative_resolved_path,
@@ -181,12 +195,25 @@ class DataTemplateBase(rst.Directive):
                 "-", "_")  # make identifier-compatible if trivially possible
             loader_options.setdefault(k, v)  # do not overwrite
 
-        with self.loader(**loader_options) as data:
-            context = self._make_context(data, app.config, env)
-            rendered_template = render_function(
-                template,
-                context,
-            )
+        try:
+            with self.loader(**loader_options) as data:
+                context = self._make_context(data, app.config, env)
+                rendered_template = render_function(
+                    template,
+                    context,
+                )
+        except FileNotFoundError:
+            error = self.state_machine.reporter.error(
+                f"Source file '{relative_resolved_path}' not found",
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
+        except jinja2.exceptions.TemplateNotFound:
+            error = self.state_machine.reporter.error(
+                f"Template file '{template}' not found",
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
 
         result = ViewList()
         for line in rendered_template.splitlines():

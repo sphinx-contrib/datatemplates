@@ -44,3 +44,25 @@ def test_nonexistent_template(app: SphinxTestApp, warning: StringIO):
         "ERROR: Template file 'sample1.tmpl' not found"
     )
     assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="nonexistent-template-filter")
+def test_nonexistent_template_filter(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Error in template file 'sample.tmpl' line 1: "
+        "No filter named 'some_filter'."
+    )
+    assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="incorrect-template-syntax")
+def test_incorrect_template_syntax(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Error in template file 'sample.tmpl' line 1: "
+        "unexpected '}'"
+    )
+    assert expected_error_str in warning.getvalue()

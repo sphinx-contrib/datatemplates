@@ -214,6 +214,13 @@ class DataTemplateBase(rst.Directive):
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
+        except jinja2.exceptions.TemplateSyntaxError as error:
+            error = self.state_machine.reporter.error(
+                f"Error in template file '{template}' line {error.lineno}: "
+                f"{error.message}",
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
 
         result = ViewList()
         for line in rendered_template.splitlines():

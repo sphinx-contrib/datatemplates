@@ -1,5 +1,6 @@
 import codecs
 import csv
+import dbm
 import json
 import mimetypes
 from collections import defaultdict
@@ -214,7 +215,11 @@ class DataTemplateBase(rst.Directive):
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
-        except (json.decoder.JSONDecodeError, ET.ParseError) as err:
+        except (
+            json.decoder.JSONDecodeError,
+            ET.ParseError,
+            dbm.error[0],
+        ) as err:
             error = self.state_machine.reporter.error(
                 f"Error in source file '{relative_resolved_path}': {err}",
                 nodes.literal_block(self.block_text, self.block_text),

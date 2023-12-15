@@ -112,3 +112,14 @@ def test_incorrect_import_module(app: SphinxTestApp, warning: StringIO):
         "ERROR: Source module 'some_module' not found"
     )
     assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="incorrect-dbm")
+def test_incorrect_dbm(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Error in source file 'sampledbm': "
+        "db type could not be determined"
+    )
+    assert expected_error_str in warning.getvalue()

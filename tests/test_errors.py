@@ -66,3 +66,14 @@ def test_incorrect_template_syntax(app: SphinxTestApp, warning: StringIO):
         "unexpected '}'"
     )
     assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="incorrect-json-syntax")
+def test_incorrect_json_syntax(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Error in source file 'sample.json': "
+        "Invalid control character at: line 2 column 28 (char 29)"
+    )
+    assert expected_error_str in warning.getvalue()

@@ -1,0 +1,16 @@
+---
+key1: value1
+key2:
+  - list item 1
+  - list item 2
+  - list item 3
+nested-list:
+  - ['a', 'b', 'c']
+  - ['A', 'B', 'C']
+mapping-series:
+  - cola: a
+  colb: b
+    colc: c
+  - cola: A
+    colb: B
+    colc: C

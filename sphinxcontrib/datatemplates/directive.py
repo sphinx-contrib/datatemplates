@@ -208,9 +208,18 @@ class DataTemplateBase(rst.Directive):
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
-        except json.decoder.JSONDecodeError as error:
+        except json.decoder.JSONDecodeError as err:
             error = self.state_machine.reporter.error(
-                f"Error in source file '{relative_resolved_path}': {error}",
+                f"Error in source file '{relative_resolved_path}': {err}",
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
+        except yaml.error.MarkedYAMLError as err:
+            if err.context_mark.name == absolute_resolved_path:
+                err.context_mark.name = relative_resolved_path
+            err.problem_mark.name = relative_resolved_path
+            error = self.state_machine.reporter.error(
+                f"Error in source file '{relative_resolved_path}': {err}",
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
@@ -220,10 +229,10 @@ class DataTemplateBase(rst.Directive):
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
-        except jinja2.exceptions.TemplateSyntaxError as error:
+        except jinja2.exceptions.TemplateSyntaxError as err:
             error = self.state_machine.reporter.error(
-                f"Error in template file '{template}' line {error.lineno}: "
-                f"{error.message}",
+                f"Error in template file '{template}' line {err.lineno}: "
+                f"{err.message}",
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]

@@ -77,3 +77,17 @@ def test_incorrect_json_syntax(app: SphinxTestApp, warning: StringIO):
         "Invalid control character at: line 2 column 28 (char 29)"
     )
     assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="incorrect-yaml-syntax")
+def test_incorrect_yaml_syntax(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Error in source file 'sample.yaml': "
+        "while parsing a block collection\n"
+        '  in "sample.yaml", line 11, column 3\n'
+        "expected <block end>, but found '?'\n"
+        '  in "sample.yaml", line 12, column 3'
+    )
+    assert expected_error_str in warning.getvalue()

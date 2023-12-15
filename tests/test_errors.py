@@ -91,3 +91,14 @@ def test_incorrect_yaml_syntax(app: SphinxTestApp, warning: StringIO):
         '  in "sample.yaml", line 12, column 3'
     )
     assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="incorrect-xml-syntax")
+def test_incorrect_xml_syntax(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Error in source file 'sample.xml': "
+        "not well-formed (invalid token): line 2, column 4"
+    )
+    assert expected_error_str in warning.getvalue()

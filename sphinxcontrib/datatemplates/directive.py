@@ -208,6 +208,12 @@ class DataTemplateBase(rst.Directive):
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
+        except ModuleNotFoundError:
+            error = self.state_machine.reporter.error(
+                f"Source module '{relative_resolved_path}' not found",
+                nodes.literal_block(self.block_text, self.block_text),
+                line=self.lineno)
+            return [error]
         except (json.decoder.JSONDecodeError, ET.ParseError) as err:
             error = self.state_machine.reporter.error(
                 f"Error in source file '{relative_resolved_path}': {err}",

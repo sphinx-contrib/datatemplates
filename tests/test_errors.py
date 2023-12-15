@@ -102,3 +102,13 @@ def test_incorrect_xml_syntax(app: SphinxTestApp, warning: StringIO):
         "not well-formed (invalid token): line 2, column 4"
     )
     assert expected_error_str in warning.getvalue()
+
+
+@pytest.mark.sphinx("html", testroot="incorrect-import-module")
+def test_incorrect_import_module(app: SphinxTestApp, warning: StringIO):
+    app.builder.build_all()
+    expected_error_str = (
+        f"{app.srcdir / 'index.rst'}:1: "
+        "ERROR: Source module 'some_module' not found"
+    )
+    assert expected_error_str in warning.getvalue()

@@ -1,0 +1,20 @@
+<sample
+    <key1>value1</key1>
+    <key2>
+        <item>list item 1</item>
+        <item>list item 2</item>
+        <item special='yes'>list item 3</item>
+    </key2>
+    <mappingseries>
+        <mapping>
+            <cola special='yes'>a</cola>
+            <colb>b</colb>
+            <colc>c</colc>
+        </mapping>
+        <mapping>
+            <cola>A</cola>
+            <colb special='yes'>B</colb>
+            <colc>C</colc>
+        </mapping>
+    </mappingseries>
+</sample>

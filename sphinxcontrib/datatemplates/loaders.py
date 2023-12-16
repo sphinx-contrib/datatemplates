@@ -11,6 +11,10 @@ import yaml
 registered_loaders = []
 
 
+class LoaderError(Exception):
+    pass
+
+
 class LoaderEntry:
     def __init__(self, loader, name, match_source):
         self.loader = loader
@@ -113,7 +117,10 @@ def load_csv(source,
 @contextlib.contextmanager
 def load_json(source, absolute_resolved_path, encoding='utf-8-sig', **options):
     with open(absolute_resolved_path, 'r', encoding=encoding) as f:
-        yield json.load(f)
+        try:
+            yield json.load(f)
+        except json.decoder.JSONDecodeError as error:
+            raise LoaderError(str(error)) from error
 
 
 @file_extension_loader("yaml", ['.yml', '.yaml'])
@@ -124,26 +131,41 @@ def load_yaml(source,
               multiple_documents=False,
               **options):
     with open(absolute_resolved_path, 'r', encoding=encoding) as f:
-        if multiple_documents:
-            yield list(
-                yaml.safe_load_all(f)
-            )  # force loading all documents now so the file can be closed
-        else:
-            yield yaml.safe_load(f)
+        try:
+            if multiple_documents:
+                yield list(
+                    yaml.safe_load_all(f)
+                )  # force loading all documents now so the file can be closed
+            else:
+                yield yaml.safe_load(f)
+        except yaml.error.MarkedYAMLError as error:
+            if error.context_mark.name == absolute_resolved_path:
+                error.context_mark.name = source
+            error.problem_mark.name = source
+            raise LoaderError(str(error)) from error
 
 
 @lenient_mimetype_loader('xml', 'xml')
 @contextlib.contextmanager
 def load_xml(source, absolute_resolved_path, **options):
-    yield ET.parse(absolute_resolved_path).getroot()
+    try:
+        yield ET.parse(absolute_resolved_path).getroot()
+    except ET.ParseError as error:
+        raise LoaderError(str(error)) from error
 
 
 @file_extension_loader("dbm", ['.dbm'])
 def load_dbm(source, absolute_resolved_path, **options):
-    return dbm.open(absolute_resolved_path, "r")
+    try:
+        return dbm.open(absolute_resolved_path, "r")
+    except dbm.error[0] as error:
+        raise LoaderError(str(error)) from error
 
 
 @data_source_loader("import-module")
 @contextlib.contextmanager
 def load_import_module(source, **options):
-    yield importlib.import_module(source)
+    try:
+        yield importlib.import_module(source)
+    except ModuleNotFoundError as error:
+        raise LoaderError(str(error)) from error

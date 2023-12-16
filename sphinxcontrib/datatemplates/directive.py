@@ -1,6 +1,5 @@
 import codecs
 import csv
-import dbm
 import json
 import mimetypes
 from collections import defaultdict
@@ -209,28 +208,9 @@ class DataTemplateBase(rst.Directive):
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]
-        except ModuleNotFoundError:
+        except loaders.LoaderError as err:
             error = self.state_machine.reporter.error(
-                f"Source module '{relative_resolved_path}' not found",
-                nodes.literal_block(self.block_text, self.block_text),
-                line=self.lineno)
-            return [error]
-        except (
-            json.decoder.JSONDecodeError,
-            ET.ParseError,
-            dbm.error[0],
-        ) as err:
-            error = self.state_machine.reporter.error(
-                f"Error in source file '{relative_resolved_path}': {err}",
-                nodes.literal_block(self.block_text, self.block_text),
-                line=self.lineno)
-            return [error]
-        except yaml.error.MarkedYAMLError as err:
-            if err.context_mark.name == absolute_resolved_path:
-                err.context_mark.name = relative_resolved_path
-            err.problem_mark.name = relative_resolved_path
-            error = self.state_machine.reporter.error(
-                f"Error in source file '{relative_resolved_path}': {err}",
+                f"Error in source '{relative_resolved_path}': {err}",
                 nodes.literal_block(self.block_text, self.block_text),
                 line=self.lineno)
             return [error]

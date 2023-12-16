@@ -73,7 +73,7 @@ def test_incorrect_json_syntax(app: SphinxTestApp, warning: StringIO):
     app.builder.build_all()
     expected_error_str = (
         f"{app.srcdir / 'index.rst'}:1: "
-        "ERROR: Error in source file 'sample.json': "
+        "ERROR: Error in source 'sample.json': "
         "Invalid control character at: line 2 column 28 (char 29)"
     )
     assert expected_error_str in warning.getvalue()
@@ -84,7 +84,7 @@ def test_incorrect_yaml_syntax(app: SphinxTestApp, warning: StringIO):
     app.builder.build_all()
     expected_error_str = (
         f"{app.srcdir / 'index.rst'}:1: "
-        "ERROR: Error in source file 'sample.yaml': "
+        "ERROR: Error in source 'sample.yaml': "
         "while parsing a block collection\n"
         '  in "sample.yaml", line 11, column 3\n'
         "expected <block end>, but found '?'\n"
@@ -98,7 +98,7 @@ def test_incorrect_xml_syntax(app: SphinxTestApp, warning: StringIO):
     app.builder.build_all()
     expected_error_str = (
         f"{app.srcdir / 'index.rst'}:1: "
-        "ERROR: Error in source file 'sample.xml': "
+        "ERROR: Error in source 'sample.xml': "
         "not well-formed (invalid token): line 2, column 4"
     )
     assert expected_error_str in warning.getvalue()
@@ -109,7 +109,7 @@ def test_incorrect_import_module(app: SphinxTestApp, warning: StringIO):
     app.builder.build_all()
     expected_error_str = (
         f"{app.srcdir / 'index.rst'}:1: "
-        "ERROR: Source module 'some_module' not found"
+        "ERROR: Error in source 'some_module': No module named 'some_module'"
     )
     assert expected_error_str in warning.getvalue()
 
@@ -119,7 +119,7 @@ def test_incorrect_dbm(app: SphinxTestApp, warning: StringIO):
     app.builder.build_all()
     expected_error_str = (
         f"{app.srcdir / 'index.rst'}:1: "
-        "ERROR: Error in source file 'sampledbm': "
+        "ERROR: Error in source 'sampledbm': "
         "db type could not be determined"
     )
     assert expected_error_str in warning.getvalue()

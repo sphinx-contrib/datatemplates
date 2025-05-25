@@ -1,13 +1,11 @@
 [build-system]
-requires = ["setuptools", "setuptools_scm[toml]>=6.2"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [project]
 name = "sphinxcontrib.datatemplates"
 readme = "README.rst"
-authors = [
-  {name = "Doug Hellmann", email = "doug@doughellmann.com"},
-]
+authors = [{ name = "Doug Hellmann", email = "doug@doughellmann.com" }]
 description = "Sphinx extension for rendering data files as nice HTML"
 dynamic = ["version"]
 
@@ -20,23 +18,16 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Documentation",
     "Topic :: Utilities",
 ]
 
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 
-dependencies = [
-    "Sphinx",
-    "PyYAML",
-    "defusedxml",
-    "sphinxcontrib-runcmd",
-]
+dependencies = ["Sphinx", "PyYAML", "defusedxml", "sphinxcontrib-runcmd"]
 
 [project.scripts]
 datatemplate = "sphinxcontrib.datatemplates.cli:main"
@@ -46,23 +37,45 @@ homepage = "https://sphinxcontribdatatemplates.readthedocs.io/en/latest/"
 repository = "http://github.com/sphinx-contrib/datatemplates"
 
 [project.optional-dependencies]
-linter = [
-    "flake8",
-]
-test = [
-    "pytest",
-    "beautifulsoup4",
-]
-build = [
-    "build",
-    "twine",
+linter = ["ruff"]
+test = ["pytest", "beautifulsoup4"]
+build = ["twine"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "sphinxcontrib/datatemplates/version.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["sphinxcontrib/", "README.rst", "LICENSE", "pyproject.toml"]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["sphinxcontrib"]
+
+[tool.hatch.build]
+exclude = ["/doc", "/tests", "/dist", "/build"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.envs.test]
+features = ["test", "linter", "build"]
+dependencies = ["check-python-versions"]
+[tool.hatch.envs.test.scripts]
+test = "pytest tests"
+lint = ["ruff check sphinxcontrib", "ruff format --check sphinxcontrib"]
+lint-fix = ["ruff format sphinxcontrib"]
+pkglint = [
+    "hatch build",
+    "twine check dist/*.tar.gz",
+    "check-python-versions --only pyproject.toml,.github/workflows/test.yml",
 ]
 
-[tools.setuptools]
-packages = [
-    "sphinxcontrib.datatemplates",
-]
+[tool.hatch.envs.docs]
+dependencies = ["sphinx"]
+[tool.hatch.envs.docs.scripts]
+build = "python -m sphinx.cmd.build -E -W -v -T doc/source doc/build"
 
-# https://github.com/pypa/setuptools_scm/
-[tool.setuptools_scm]
-write_to = "sphinxcontrib/datatemplates/version.py"
+[tool.ruff]
+exclude = ["sphinxcontrib/datatemplates/version.py"]

@@ -40,29 +40,36 @@ def loader_by_name(name, default=None):
 
 def mimetype_loader(name, mimetype):
     "A data loader for the exact mimetype."
+
     def check_mimetype(source):
         guess = mimetypes.guess_type(source)[0]
         if not guess:
             return False
         return guess == mimetype
+
     return data_source_loader(name, check_mimetype)
 
 
 def lenient_mimetype_loader(name, mimetype_fragment):
     "A data loader for a mimetype containing the given substring."
+
     def check_mimetype(source):
         guess = mimetypes.guess_type(source)[0]
         if not guess:
             return False
         return mimetype_fragment in guess
+
     return data_source_loader(name, check_mimetype)
 
 
 def file_extension_loader(name, extensions):
     "A data loader for filenames ending with one of the given extensions."
+
     def check_ext(filename):
         return pathlib.Path(filename).suffix.lower() in set(
-            e.lower() for e in extensions)
+            e.lower() for e in extensions
+        )
+
     return data_source_loader(name, check_ext)
 
 
@@ -73,6 +80,7 @@ def data_source_loader(name, match_source=None):
     source names.
 
     """
+
     def wrap(loader_func):
         registered_loaders.append(LoaderEntry(loader_func, name, match_source))
         return loader_func
@@ -88,13 +96,15 @@ def load_nodata(source, **options):
 
 @file_extension_loader("csv", [".csv"])
 @contextlib.contextmanager
-def load_csv(source,
-             absolute_resolved_path,
-             headers=False,
-             dialect=None,
-             encoding='utf-8-sig',
-             **options):
-    with open(absolute_resolved_path, 'r', newline='', encoding=encoding) as f:
+def load_csv(
+    source,
+    absolute_resolved_path,
+    headers=False,
+    dialect=None,
+    encoding="utf-8-sig",
+    **options,
+):
+    with open(absolute_resolved_path, "r", newline="", encoding=encoding) as f:
         if dialect == "auto":
             sample = f.read(8192)
             f.seek(0)
@@ -115,22 +125,24 @@ def load_csv(source,
 
 @mimetype_loader("json", "application/json")
 @contextlib.contextmanager
-def load_json(source, absolute_resolved_path, encoding='utf-8-sig', **options):
-    with open(absolute_resolved_path, 'r', encoding=encoding) as f:
+def load_json(source, absolute_resolved_path, encoding="utf-8-sig", **options):
+    with open(absolute_resolved_path, "r", encoding=encoding) as f:
         try:
             yield json.load(f)
         except json.decoder.JSONDecodeError as error:
             raise LoaderError(str(error)) from error
 
 
-@file_extension_loader("yaml", ['.yml', '.yaml'])
+@file_extension_loader("yaml", [".yml", ".yaml"])
 @contextlib.contextmanager
-def load_yaml(source,
-              absolute_resolved_path,
-              encoding='utf-8-sig',
-              multiple_documents=False,
-              **options):
-    with open(absolute_resolved_path, 'r', encoding=encoding) as f:
+def load_yaml(
+    source,
+    absolute_resolved_path,
+    encoding="utf-8-sig",
+    multiple_documents=False,
+    **options,
+):
+    with open(absolute_resolved_path, "r", encoding=encoding) as f:
         try:
             if multiple_documents:
                 yield list(
@@ -145,7 +157,7 @@ def load_yaml(source,
             raise LoaderError(str(error)) from error
 
 
-@lenient_mimetype_loader('xml', 'xml')
+@lenient_mimetype_loader("xml", "xml")
 @contextlib.contextmanager
 def load_xml(source, absolute_resolved_path, **options):
     try:
@@ -154,7 +166,7 @@ def load_xml(source, absolute_resolved_path, **options):
         raise LoaderError(str(error)) from error
 
 
-@file_extension_loader("dbm", ['.dbm'])
+@file_extension_loader("dbm", [".dbm"])
 def load_dbm(source, absolute_resolved_path, **options):
     try:
         return dbm.open(absolute_resolved_path, "r")

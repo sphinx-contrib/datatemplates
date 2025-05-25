@@ -41,7 +41,7 @@ repository = "http://github.com/sphinx-contrib/datatemplates"
 [project.optional-dependencies]
 linter = ["flake8"]
 test = ["pytest", "beautifulsoup4"]
-build = ["build", "twine"]
+build = ["twine"]
 
 [tool.hatch.version]
 source = "vcs"
@@ -58,3 +58,24 @@ exclude = ["/doc", "/tests", "/dist", "/build"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.hatch.envs.test]
+features = ["test", "linter", "build"]
+dependencies = ["check-python-versions"]
+[tool.hatch.envs.test.scripts]
+test = "pytest tests"
+lint = "flake8 sphinxcontrib"
+pkglint = [
+    "hatch build",
+    "twine check dist/*.tar.gz",
+    "check-python-versions --only pyproject.toml,.github/workflows/test.yml",
+]
+
+[tool.hatch.envs.docs]
+dependencies = ["sphinx"]
+[tool.hatch.envs.docs.scripts]
+build = "python -m sphinx.cmd.build -E -W -v -T doc/source doc/build"
+
+[tool.flake8]
+show-source = true
+exclude = ".tox,dist,doc,*.egg,build"

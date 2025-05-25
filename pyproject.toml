@@ -43,7 +43,9 @@ build = ["twine"]
 
 [tool.hatch.version]
 source = "vcs"
-path = "sphinxcontrib/datatemplates/version.py"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "sphinxcontrib/datatemplates/version.py"
 
 [tool.hatch.build.targets.sdist]
 include = ["sphinxcontrib/", "README.rst", "LICENSE", "pyproject.toml"]
@@ -75,6 +77,5 @@ dependencies = ["sphinx"]
 [tool.hatch.envs.docs.scripts]
 build = "python -m sphinx.cmd.build -E -W -v -T doc/source doc/build"
 
-[tool.flake8]
-show-source = true
-exclude = ".tox,dist,doc,*.egg,build"
+[tool.ruff]
+exclude = ["sphinxcontrib/datatemplates/version.py"]

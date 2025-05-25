@@ -37,7 +37,7 @@ homepage = "https://sphinxcontribdatatemplates.readthedocs.io/en/latest/"
 repository = "http://github.com/sphinx-contrib/datatemplates"
 
 [project.optional-dependencies]
-linter = ["flake8"]
+linter = ["ruff"]
 test = ["pytest", "beautifulsoup4"]
 build = ["twine"]
 
@@ -62,7 +62,8 @@ features = ["test", "linter", "build"]
 dependencies = ["check-python-versions"]
 [tool.hatch.envs.test.scripts]
 test = "pytest tests"
-lint = "flake8 sphinxcontrib"
+lint = ["ruff check sphinxcontrib", "ruff format --check sphinxcontrib"]
+lint-fix = ["ruff format sphinxcontrib"]
 pkglint = [
     "hatch build",
     "twine check dist/*.tar.gz",

@@ -1,4 +1,4 @@
-def make_list_table(headers, data, title='', columns=None):
+def make_list_table(headers, data, title="", columns=None):
     """Build a list-table directive.
 
     :param headers: List of header values.
@@ -8,20 +8,20 @@ def make_list_table(headers, data, title='', columns=None):
     """
     results = []
     add = results.append
-    add('.. list-table:: %s' % title)
-    add('   :header-rows: 1')
+    add(".. list-table:: %s" % title)
+    add("   :header-rows: 1")
     if columns:
-        add('   :widths: %s' % (','.join(str(c) for c in columns)))
-    add('')
-    add('   - * %s' % headers[0])
+        add("   :widths: %s" % (",".join(str(c) for c in columns)))
+    add("")
+    add("   - * %s" % headers[0])
     for h in headers[1:]:
-        add('     * %s' % h)
+        add("     * %s" % h)
     for row in data:
-        add('   - * %s' % row[0])
+        add("   - * %s" % row[0])
         for r in row[1:]:
-            add('     * %s' % r)
-    add('')
-    return '\n'.join(results)
+            add("     * %s" % r)
+    add("")
+    return "\n".join(results)
 
 
 def make_list_table_from_mappings(headers, data, title, columns=None):

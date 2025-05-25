@@ -1,13 +1,11 @@
 [build-system]
-requires = ["setuptools", "setuptools_scm[toml]>=6.2"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [project]
 name = "sphinxcontrib.datatemplates"
 readme = "README.rst"
-authors = [
-  {name = "Doug Hellmann", email = "doug@doughellmann.com"},
-]
+authors = [{ name = "Doug Hellmann", email = "doug@doughellmann.com" }]
 description = "Sphinx extension for rendering data files as nice HTML"
 dynamic = ["version"]
 
@@ -31,12 +29,7 @@ classifiers = [
 
 requires-python = ">=3.8"
 
-dependencies = [
-    "Sphinx",
-    "PyYAML",
-    "defusedxml",
-    "sphinxcontrib-runcmd",
-]
+dependencies = ["Sphinx", "PyYAML", "defusedxml", "sphinxcontrib-runcmd"]
 
 [project.scripts]
 datatemplate = "sphinxcontrib.datatemplates.cli:main"
@@ -46,23 +39,22 @@ homepage = "https://sphinxcontribdatatemplates.readthedocs.io/en/latest/"
 repository = "http://github.com/sphinx-contrib/datatemplates"
 
 [project.optional-dependencies]
-linter = [
-    "flake8",
-]
-test = [
-    "pytest",
-    "beautifulsoup4",
-]
-build = [
-    "build",
-    "twine",
-]
+linter = ["flake8"]
+test = ["pytest", "beautifulsoup4"]
+build = ["build", "twine"]
 
-[tools.setuptools]
-packages = [
-    "sphinxcontrib.datatemplates",
-]
+[tool.hatch.version]
+source = "vcs"
+path = "sphinxcontrib/datatemplates/version.py"
 
-# https://github.com/pypa/setuptools_scm/
-[tool.setuptools_scm]
-write_to = "sphinxcontrib/datatemplates/version.py"
+[tool.hatch.build.targets.sdist]
+include = ["sphinxcontrib/", "README.rst", "LICENSE", "pyproject.toml"]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["sphinxcontrib"]
+
+[tool.hatch.build]
+exclude = ["/doc", "/tests", "/dist", "/build"]
+
+[tool.hatch.metadata]
+allow-direct-references = true

@@ -2,6 +2,12 @@
  Release History
 =================
 
+Next
+====
+
+* Switch packaging tool to hatch
+* Switch linter to ruff
+
 0.10.0
 ======
 
